@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gradeo — GCSE Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f1b3d;--bg:#f2f4fa;--card:#fff;--line:#0f1b3d;--blue:#2b50ff;--org:#ff7a1a;--mint:#17c3a0;--muted:#5d6785;--sh:#0f1b3d;--soft:#e8ecff}
+body.dark{--ink:#eef1ff;--bg:#0b1020;--card:#141b33;--line:#3a4570;--muted:#9aa5cc;--sh:#2b50ff;--soft:#1d2748}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Plus Jakarta Sans',Inter,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+h1,h2,h3,.stat,.timer,.logo{font-family:'Bricolage Grotesque','Plus Jakarta Sans',Arial,sans-serif;letter-spacing:-.02em}
+h2,h3{margin:0 0 8px}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+:focus-visible{outline:3px solid var(--org);outline-offset:2px}
+.app{display:flex;min-height:100vh}
+.sidebar{width:250px;background:#0f1b3d;color:#c9d1f5;padding:22px 16px;position:fixed;top:0;bottom:0;left:0;overflow:auto}
+.dark .sidebar{background:#070b17;border-right:1px solid #1d2748}
+.logo{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:800;margin:0 6px 30px;color:#fff}
+.logo em{font-style:normal;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--org);color:#0f1b3d;font-size:20px;transform:rotate(-6deg)}
+.logo span{color:var(--org)}
+.nav button{width:100%;padding:12px 14px;text-align:left;background:transparent;border-radius:12px;margin-bottom:4px;color:inherit;font-weight:500;transition:background .15s}
+.nav button:hover{background:#1c2a58;color:#fff}
+.nav button.active{background:var(--blue);color:#fff;font-weight:700}
+.nav .ic{display:inline-block;width:30px}
+.main{margin-left:250px;width:calc(100% - 250px);padding:32px 36px;max-width:1200px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+.topbar h2{font-size:30px;margin:0}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:22px;margin-bottom:20px;box-shadow:4px 4px 0 var(--sh)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:20px}
+.grid .card{margin-bottom:0}
+.subject{padding:18px;border-radius:18px;background:var(--card);border:2px solid var(--line);border-top:8px solid var(--c,var(--blue));cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:3px 3px 0 var(--sh)}
+.subject:hover{transform:translate(-2px,-3px);box-shadow:6px 7px 0 var(--sh)}
+.subject h3{font-size:18px;margin:10px 0 8px}
+.ico{display:grid;place-items:center;width:52px;height:52px;border-radius:14px;font-size:26px;background:color-mix(in srgb,var(--c,var(--blue)) 18%,transparent);margin-bottom:6px}
+.ico.lg{width:72px;height:72px;font-size:38px;border-radius:20px}
+.btn{background:var(--blue);color:#fff;padding:11px 18px;border-radius:12px;font-weight:700;border:2px solid var(--line);box-shadow:3px 3px 0 var(--sh);transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--sh)}
+.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--sh)}
+.btn.secondary{background:var(--soft);color:var(--ink)}
+.btn.danger{background:#e5484d}
+input,textarea,select{width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+input:focus,textarea:focus{outline:3px solid var(--blue);outline-offset:0}
+textarea{resize:vertical}
+.hero{position:relative;overflow:hidden;padding:36px;background:var(--blue);color:#fff;border-radius:24px;margin-bottom:22px;border:2px solid var(--line);box-shadow:6px 6px 0 var(--sh)}
+.hero::after{content:"";position:absolute;right:-50px;top:-50px;width:210px;height:210px;border-radius:50%;background:var(--org);border:2px solid #0f1b3d}
+.hero h1{position:relative;z-index:1;margin:0 0 10px;font-size:40px;line-height:1.1;max-width:560px}
+.hero p{position:relative;z-index:1;max-width:480px;margin:0 0 18px;font-size:17px}
+.hero .btn{position:relative;z-index:1;background:#fff;color:#0f1b3d;border-color:#0f1b3d;box-shadow:3px 3px 0 #0f1b3d}
+.stat{font-size:36px;font-weight:800}
+.stats .card:nth-child(1){background:#ffe9d6;color:#0f1b3d}
+.stats .card:nth-child(2){background:#d6f6ee;color:#0f1b3d}
+.stats .card:nth-child(3){background:#e0e6ff;color:#0f1b3d}
+.stats .card .small{color:#4a5473}
+.small{font-size:13px;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.quiz-question{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:700;margin-bottom:16px}
+.option{display:block;width:100%;text-align:left;padding:14px 16px;margin:10px 0;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font-weight:500;transition:transform .1s}
+.option:hover:not(:disabled){background:var(--soft);transform:translateX(4px)}
+.option.right{background:#c9f5dc;border-color:#13894a;color:#0c3a21}
+.option.wrong{background:#ffd9d9;border-color:#d03a3f;color:#4a1416}
+.timer{font-size:76px;font-weight:800;text-align:center;margin:24px;font-variant-numeric:tabular-nums}
+.struggle{border-color:var(--org,#ff7a1a)}
+.help{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:2px dashed var(--line)}
+.help:last-child{border:0}
+.lnks{display:flex;gap:8px;flex-wrap:wrap}
+.lnk{display:inline-block;padding:8px 12px;border-radius:10px;border:2px solid var(--line);background:var(--soft);color:var(--ink);font-weight:700;font-size:14px;text-decoration:none}
+.lnk.yt{background:#ff0033;color:#fff}
+.bar{height:14px;border-radius:99px;background:var(--soft);border:2px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--mint);transition:width .3s}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 14px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.chips.sm{margin-bottom:12px}
+.chip{padding:8px 14px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:14px}
+.chip b{opacity:.6;margin-left:4px}
+.chip.on{background:var(--blue);color:#fff}
+.chip.add{border-style:dashed;background:transparent}
+.task{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:2px dashed var(--line)}
+.task:last-child{border:0}
+.tick{flex-shrink:0;width:30px;height:30px;border-radius:9px;border:2px solid var(--line);background:var(--card);color:#fff;font-weight:800;font-size:18px;line-height:1;display:grid;place-items:center}
+.task.done .tick{background:var(--mint)}
+.task.done .ttl{text-decoration:line-through;opacity:.55}
+.tmain{flex:1;min-width:0}
+.ttl{font-weight:700;word-break:break-word}
+.tmeta{display:flex;gap:6px 12px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:4px}
+.due.over{color:#e5484d;font-weight:700}
+.due.soon{color:var(--org);font-weight:700}
+.x{flex-shrink:0;width:30px;height:30px;border-radius:9px;background:transparent;color:var(--muted);font-size:16px}
+.x:hover{color:#e5484d}
+.empty{text-align:center}
+.empty .big{font-size:40px}
+.badge{display:inline-block;padding:5px 11px;border-radius:999px;background:var(--soft);border:1.5px solid var(--line);margin:3px 3px 3px 0;font-size:13px;font-weight:500}
+.award{display:flex;gap:16px;align-items:center;padding:12px 0;border-bottom:2px dashed var(--line)}
+.award:last-child{border:0}
+.award.locked{opacity:.4;filter:grayscale(1)}
+.award .big{display:grid;place-items:center;width:52px;height:52px;font-size:28px;border-radius:14px;background:#ffe9d6;border:2px solid #0f1b3d}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:700;margin-bottom:6px}
+.tip{padding:12px 0;border-bottom:2px dashed var(--line)}
+.tip:last-child{border:0}
+.tip b{display:block}
+@media(max-width:850px){
+.sidebar{width:70px;padding:14px 8px}
+.logo{justify-content:center;margin:0 0 24px}
+.logo b{display:none}
+.nav button{text-align:center;padding:12px 0}
+.nav .t{display:none}
+.nav .ic{width:auto;font-size:20px}
+.main{margin-left:70px;width:calc(100% - 70px);padding:20px 16px}
+.grid{grid-template-columns:1fr}
+.hero{padding:26px}
+.hero h1{font-size:30px}
+.hero::after{width:130px;height:130px;right:-40px;top:-40px}
+.timer{font-size:60px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.explain{margin-top:14px;padding:14px 16px;border-radius:14px;border:2px solid;color:#0f1b3d}
+.explain p{margin:6px 0}
+.explain.good{background:#e6f9ee;border-color:#13894a}
+.explain.bad{background:#fff1e6;border-color:#d97706}
+.explain .small{color:#3b4468}
+.avs{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;border:2px solid var(--line);font-size:24px;font-weight:800;flex-shrink:0}
+.avs.big{width:72px;height:72px;font-size:38px}
+.avgrid{display:flex;flex-wrap:wrap;gap:8px}
+.avopt{width:48px;height:48px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:26px;display:grid;place-items:center}
+.avopt.txt{font-size:16px;font-weight:800}
+.avopt.on,.swatch.on{outline:3px solid var(--blue);outline-offset:2px}
+.swatch{width:40px;height:40px;border-radius:50%;border:2px solid var(--line)}
+.lbrow{display:flex;align-items:center;gap:12px;padding:12px 8px;border-bottom:2px dashed var(--line);border-radius:12px}
+.lbrow:last-child{border-bottom:0}
+.lbrow.me{background:var(--soft)}
+.rank{width:34px;text-align:center;font-weight:800;font-size:20px;flex-shrink:0}
+.lbxp{font-weight:800;white-space:nowrap}
+.flash{display:block;width:100%;min-height:170px;margin-top:12px;padding:24px;border:2px solid var(--line);border-radius:18px;background:var(--soft);color:var(--ink);font-size:22px;font-weight:700;text-align:center;font-family:inherit}
+.flash small{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:12px}
+.flash.back{background:#c9f5dc;color:#0c3a21}
+.flash.back small{color:#3b6b52}
+.tgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.tbtn{padding:12px 4px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-weight:800;display:grid;gap:2px;place-items:center}
+.tbtn small{font-size:11px;font-weight:600;opacity:.7}
+.tbtn.done{background:#c9f5dc;color:#0c3a21}
+.tbtn.next{background:var(--blue);color:#fff}
+.tbtn.lock{opacity:.5;cursor:not-allowed}
+.card.cur{border-color:var(--blue)}
+.pip{position:fixed;right:12px;bottom:12px;z-index:20;width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--card);font-size:24px;box-shadow:2px 2px 0 var(--sh);opacity:.9}
+.pipb{position:fixed;right:12px;bottom:64px;z-index:20;max-width:240px;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:14px;box-shadow:2px 2px 0 var(--sh)}
+.hidden{display:none!important}
+.auth{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:16px;overflow:auto}
+.authcard{width:min(420px,100%);margin:0}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tabs button{flex:1;padding:10px;border-radius:12px;background:var(--soft);color:var(--ink);font-weight:700;border:2px solid var(--line)}
+.tabs button.on{background:var(--blue);color:#fff}
+.chk{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:14px;cursor:pointer}
+.chk input{width:auto}
+.authcard a{color:var(--blue);font-weight:700}
+.authcard .btn{margin-top:4px}
+.av{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--org);color:#0f1b3d;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;border:2px solid var(--line);cursor:pointer;flex-shrink:0}
+.av img{width:100%;height:100%;object-fit:cover}
+.lgav{width:84px;height:84px;font-size:34px;cursor:default}
+.toast{display:none;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99;background:#0f1b3d;color:#fff;padding:12px 18px;border-radius:12px;border:2px solid #ff7a1a;max-width:90%}
+</style>
+</head>
+<body>
+
+<div id="auth" class="auth hidden"></div>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="logo"><em>G</em><b>Grade<span>o</span></b></div>
+  <button id="pip" class="pip hidden" onclick="pipTap()" aria-label="Pip the owl, tap for a tip">🦉</button><div id="pipb" class="pipb hidden" role="status"></div>
+  <div class="nav" id="nav">
+    <button data-v="home" onclick="go('home')"><span class="ic">🏠</span><span class="t">Home</span></button>
+    <button data-v="subjects" onclick="go('subjects')"><span class="ic">📚</span><span class="t">Subjects</span></button>
+    <button data-v="quiz" onclick="go('quiz')"><span class="ic">🧠</span><span class="t">Quiz</span></button>
+    <button data-v="foryou" onclick="go('foryou')"><span class="ic">🎓</span><span class="t">For You</span></button>
+    <button data-v="cards" onclick="go('cards')"><span class="ic">🗂️</span><span class="t">Flashcards</span></button>
+    <button data-v="advice" onclick="go('advice')"><span class="ic">🎯</span><span class="t">Study Advice</span></button>
+    <button data-v="timer" onclick="go('timer')"><span class="ic">⏱️</span><span class="t">Study Timer</span></button>
+    <button data-v="methods" onclick="go('methods')"><span class="ic">💡</span><span class="t">Study Methods</span></button>
+    <button data-v="planner" onclick="go('planner')"><span class="ic">📅</span><span class="t">Planner</span></button>
+    <button data-v="leaderboard" onclick="go('leaderboard')"><span class="ic">🏅</span><span class="t">Leaderboard</span></button>
+    <button data-v="awards" onclick="go('awards')"><span class="ic">🏆</span><span class="t">Awards</span></button>
+    <button data-v="settings" onclick="go('settings')"><span class="ic">⚙️</span><span class="t">Settings</span></button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="small">GCSE Study Dashboard</div>
+      <h2 id="pageTitle">Home</h2>
+    </div>
+    <div class="row"><div class="av" id="avatarTop" onclick="go('settings')" title="Your profile"></div><button class="btn secondary" onclick="toggleTheme()">🌙 Theme</button></div>
+  </div>
+  <div id="content"></div>
+</main>
+</div>
+
+<script>
+/* ===== HELPERS ===== */
+function store(k,d){try{const v=localStorage.getItem(pfx(k));return v===null?d:v}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(pfx(k),v)}catch(e){toast("Couldn't save. Your browser storage may be full or blocked.")}}
+function toast(t){
+  let e=document.getElementById("toast");
+  if(!e){e=document.createElement("div");e.id="toast";e.className="toast";document.body.appendChild(e)}
+  e.textContent=t;e.style.display="block";
+  clearTimeout(e._t);e._t=setTimeout(()=>{e.style.display="none"},4000);
+}
+window.addEventListener("error",()=>toast("Something went wrong. Try again, or refresh the page."));
+window.addEventListener("unhandledrejection",()=>toast("Something went wrong. Try again, or refresh the page."));
+function escapeHTML(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+
+/* ===== ACCOUNTS (saved in this browser) ===== */
+let currentUser=null;
+let authUser="";
+const GLOBAL_KEYS=["gradeo_theme","gradeo_users","gradeo_session"];
+const SEC_QUESTIONS=["What was your first pet's name?","What street did you grow up on?","What is your favourite teacher's surname?","What was your first school called?","What is your favourite food?"];
+function pfx(k){return(currentUser&&!GLOBAL_KEYS.includes(k))?"gradeo_u_"+currentUser+"_"+k:k}
+function getUsers(){try{return JSON.parse(store("gradeo_users","{}"))}catch(e){return{}}}
+function setUsers(u){save("gradeo_users",JSON.stringify(u))}
+const norm=s=>s.trim().toLowerCase();
+async function hash(t){
+  if(window.crypto&&crypto.subtle){
+    const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));
+    return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("");
+  }
+  let h=5381;for(const c of t)h=((h<<5)+h+c.charCodeAt(0))|0;return "x"+h;
+}
+function amsg(t,ok){const m=document.getElementById("authMsg");if(m){m.textContent=t;m.style.color=ok?"#13894a":"#d03a3f"}}
+function togglePw(){["aP","sP","fP"].forEach(id=>{const e=document.getElementById(id);if(e)e.type=e.type==="password"?"text":"password"})}
+const showBox=`<label class="chk"><input type="checkbox" onchange="togglePw()"> Show password</label>`;
+
+function showAuth(mode){
+  const a=document.getElementById("auth");
+  a.classList.remove("hidden");
+  const tab=(m,l)=>`<button class="${mode===m?"on":""}" onclick="showAuth('${m}')">${l}</button>`;
+  let body="";
+  if(mode==="login"){
+    body=`<div class="field"><label for="aU">Username</label><input id="aU" autocomplete="username"></div>
+    <div class="field"><label for="aP">Password</label><input id="aP" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    ${showBox}<label class="chk"><input type="checkbox" id="aRem" checked> Keep me logged in</label>
+    <button class="btn" onclick="doLogin()">Log in</button>
+    <p class="small"><a href="#" onclick="showAuth('forgot1');return false">Forgot your password?</a></p>`;
+  }else if(mode==="signup"){
+    body=`<div class="field"><label for="sU">Username</label><input id="sU" autocomplete="username" placeholder="3–20 letters or numbers"></div>
+    <div class="field"><label for="sP">Password</label><input id="sP" type="password" autocomplete="new-password" placeholder="At least 6 characters"></div>
+    ${showBox}
+    <div class="field"><label for="sQ">Security question</label><select id="sQ">${SEC_QUESTIONS.map(q=>`<option>${q}</option>`).join("")}</select></div>
+    <div class="field"><label for="sA">Your answer</label><input id="sA" autocomplete="off" onkeydown="if(event.key==='Enter')doSignup()"></div>
+    <p class="small">You'll use this question to reset your password. Capital letters don't matter.</p>
+    <button class="btn" onclick="doSignup()">Create account</button>`;
+  }else if(mode==="forgot1"){
+    body=`<h3>Reset your password</h3><div class="field"><label for="fU">Username</label><input id="fU" onkeydown="if(event.key==='Enter')doForgot1()"></div>
+    <button class="btn" onclick="doForgot1()">Next</button> <button class="btn secondary" onclick="showAuth('login')">Back</button>`;
+  }else if(mode==="forgot2"){
+    const u=getUsers()[authUser];
+    body=`<h3>Reset your password</h3><p><b>${escapeHTML(u.q)}</b></p>
+    <div class="field"><label for="fA">Your answer</label><input id="fA" autocomplete="off"></div>
+    <div class="field"><label for="fP">New password</label><input id="fP" type="password" autocomplete="new-password" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doForgot2()"></div>
+    ${showBox}<button class="btn" onclick="doForgot2()">Save new password</button> <button class="btn secondary" onclick="showAuth('login')">Cancel</button>`;
+  }
+  a.innerHTML=`<div class="card authcard"><div class="logo" style="color:var(--ink);margin:0 0 16px"><em>G</em><b>Grade<span>o</span></b></div>
+  ${mode.startsWith("forgot")?"":`<div class="tabs">${tab("login","Log in")}${tab("signup","Sign up")}</div>`}
+  ${body}<div class="small" id="authMsg" style="margin-top:12px;min-height:18px"></div></div>`;
+}
+
+async function doSignup(){
+  const name=document.getElementById("sU").value.trim();
+  const pw=document.getElementById("sP").value;
+  const q=document.getElementById("sQ").value;
+  const ans=document.getElementById("sA").value;
+  const key=norm(name);
+  if(!/^[a-z0-9_.-]{3,20}$/.test(key))return amsg("Username must be 3–20 letters or numbers.");
+  if(pw.length<6)return amsg("Password must be at least 6 characters.");
+  if(!ans.trim())return amsg("Type an answer to your security question.");
+  const users=getUsers();
+  if(users[key])return amsg("That username is taken. Try another.");
+  const salt=Math.random().toString(36).slice(2)+Date.now().toString(36);
+  users[key]={name:name,salt:salt,pass:await hash(salt+pw),q:q,a:await hash(salt+norm(ans)),avatar:""};
+  setUsers(users);
+  save("gradeo_session",key);
+  login(key);
+}
+async function doLogin(){
+  const key=norm(document.getElementById("aU").value);
+  const pw=document.getElementById("aP").value;
+  const u=getUsers()[key];
+  if(!u||(await hash(u.salt+pw))!==u.pass)return amsg("Wrong username or password.");
+  if(document.getElementById("aRem").checked)save("gradeo_session",key);else save("gradeo_session","");
+  login(key);
+}
+function doForgot1(){
+  const key=norm(document.getElementById("fU").value);
+  if(!getUsers()[key])return amsg("We can't find that username.");
+  authUser=key;showAuth("forgot2");
+}
+async function doForgot2(){
+  const users=getUsers();const u=users[authUser];
+  const ans=document.getElementById("fA").value;
+  const pw=document.getElementById("fP").value;
+  if(pw.length<6)return amsg("New password must be at least 6 characters.");
+  if((await hash(u.salt+norm(ans)))!==u.a)return amsg("That answer doesn't match.");
+  u.pass=await hash(u.salt+pw);
+  setUsers(users);
+  showAuth("login");
+  amsg("Password changed. Log in with your new password.",true);
+}
+function login(key){
+  currentUser=key;
+  loadState();
+  const authBox=document.getElementById("auth");
+  authBox.classList.add("hidden");
+  authBox.innerHTML="";
+  updateAvatars();
+  go("home");
+}
+function logout(){
+  save("gradeo_session","");
+  clearInterval(timerInterval);timerRunning=false;timerLen=25*60;timerLbl="Pomodoro";timerXP=1;timerSeconds=timerLen;
+  currentUser=null;quiz=null;
+  showAuth("login");
+}
+function me(){return getUsers()[currentUser]||{name:"",avatar:""}}
+function avatarInner(){
+  const u=me(),a=(u.ava&&typeof u.ava==="object")?u.ava:{};
+  return a.e?a.e:escapeHTML((u.name||"?").charAt(0).toUpperCase());
+}
+function updateAvatars(){
+  const t=document.getElementById("avatarTop");if(!t)return;
+  const u=me(),a=(u.ava&&typeof u.ava==="object")?u.ava:{},c=a.c||"#ff7a1a";
+  t.innerHTML=avatarInner();t.style.background=c;t.style.color=lum(c)>150?"#0f1b3d":"#fff";t.style.fontSize=a.e?"24px":"";
+}
+
+/* ===== STATE ===== */
+let view="home",arg=null,quiz=null;
+let state={xp:0,streak:0,lastDay:"",quizzes:0,perfect:0,sessions:0,plan:"",weak:{},tasks:[],secs:[],cards:[],miss:[],diff:"normal",path:{},ctopics:{}};
+function loadState(){state={
+  xp:Number(store("gradeo_xp",0)),streak:Number(store("gradeo_streak",0)),lastDay:store("gradeo_lastday",""),
+  quizzes:Number(store("gradeo_quizzes",0)),perfect:Number(store("gradeo_perfect",0)),
+  sessions:Number(store("gradeo_sessions",0)),plan:store("gradeo_plan",""),weak:(()=>{try{return JSON.parse(store("gradeo_weak","{}"))||{}}catch(e){return{}}})(),
+  tasks:(()=>{try{const v=JSON.parse(store("gradeo_tasks","[]"));return Array.isArray(v)?v:[]}catch(e){return[]}})(),
+  secs:(()=>{try{const v=JSON.parse(store("gradeo_secs","[]"));return Array.isArray(v)?v:[]}catch(e){return[]}})(),
+  cards:(()=>{try{const v=JSON.parse(store("gradeo_cards","[]"));return Array.isArray(v)?v:[]}catch(e){return[]}})(),
+  miss:(()=>{try{const v=JSON.parse(store("gradeo_miss","[]"));return Array.isArray(v)?v:[]}catch(e){return[]}})(),
+  diff:store("gradeo_diff","normal"),
+  ctopics:(()=>{try{const v=JSON.parse(store("gradeo_ctopics","{}"));return v&&typeof v==="object"?v:{}}catch(e){return{}}})(),
+  path:(()=>{try{const v=JSON.parse(store("gradeo_path","{}"));return v&&typeof v==="object"?v:{}}catch(e){return{}}})()
+};}
+function persist(){
+  save("gradeo_xp",state.xp);save("gradeo_streak",state.streak);save("gradeo_lastday",state.lastDay);
+  save("gradeo_quizzes",state.quizzes);save("gradeo_perfect",state.perfect);
+  save("gradeo_sessions",state.sessions);save("gradeo_plan",state.plan);save("gradeo_weak",JSON.stringify(state.weak||{}));save("gradeo_tasks",JSON.stringify(state.tasks||[]));save("gradeo_secs",JSON.stringify(state.secs||[]));save("gradeo_cards",JSON.stringify(state.cards||[]));save("gradeo_miss",JSON.stringify(state.miss||[]));save("gradeo_diff",state.diff||"normal");save("gradeo_ctopics",JSON.stringify(state.ctopics||{}));save("gradeo_path",JSON.stringify(state.path||{}));
+}
+function addXP(n){
+  const today=new Date().toDateString();
+  if(state.lastDay!==today){
+    const y=new Date();y.setDate(y.getDate()-1);
+    state.streak=state.lastDay===y.toDateString()?state.streak+1:1;
+    state.lastDay=today;
+  }
+  state.xp+=n;persist();
+}
+const level=()=>Math.floor(state.xp/100)+1;
+
+/* ===== CONTENT ===== */
+const SUBJECTS=[
+ {id:"maths",name:"Maths",icon:"➗",c:"#2b50ff",topics:["Algebra","Ratio & proportion","Geometry","Probability","Statistics"],
+  advice:["Practise past papers: maths is learned by doing, not reading.","Redo every question you got wrong a week later.","Show your working. Method marks add up."],
+  qs:[{t:"Algebra",q:"Solve: 3x + 5 = 20",o:["x = 3","x = 5","x = 15","x = 25"],a:1},{t:"Ratio & proportion",q:"What is 15% of 80?",o:["8","10","12","15"],a:2},{t:"Geometry",q:"The angles in a triangle add up to…",o:["90°","180°","270°","360°"],a:1},{t:"Statistics",q:"What is the mean of 2, 4, 6, 8?",o:["4","5","6","20"],a:1}]},
+ {id:"english",name:"English",icon:"📖",c:"#ff7a1a",topics:["Language Paper 1","Language Paper 2","Shakespeare","19th-century novel","Poetry"],
+  advice:["Learn 10–15 short quotes per text, not whole speeches.","Use PEE or PEAL paragraphs: point, evidence, explain, link.","Plan every essay for 3 minutes before writing."],
+  qs:[{t:"Poetry",q:"A word that imitates a sound is…",o:["Simile","Onomatopoeia","Metaphor","Alliteration"],a:1},{t:"Shakespeare",q:"Who wrote 'Macbeth'?",o:["Dickens","Austen","Shakespeare","Orwell"],a:2},{t:"Language Paper 1",q:"'She is as brave as a lion' is a…",o:["Simile","Metaphor","Personification","Oxymoron"],a:0},{t:"Poetry",q:"Repeating the same starting sound is…",o:["Alliteration","Irony","Rhyme","Sarcasm"],a:0}]},
+ {id:"biology",name:"Biology",icon:"🧬",c:"#17c3a0",topics:["Cells","Organisation","Infection & response","Bioenergetics","Inheritance"],
+  advice:["Draw and label diagrams from memory.","Learn command words: describe, explain, evaluate.","Use flashcards for key terms like osmosis and diffusion."],
+  qs:[{t:"Cells",q:"Which organelle releases energy in a cell?",o:["Nucleus","Ribosome","Mitochondria","Vacuole"],a:2},{t:"Bioenergetics",q:"Photosynthesis produces glucose and…",o:["Carbon dioxide","Oxygen","Nitrogen","Water"],a:1},{t:"Inheritance",q:"DNA is found in the…",o:["Nucleus","Cell wall","Membrane","Cytoplasm"],a:0},{t:"Organisation",q:"Enzymes are…",o:["Carbohydrates","Biological catalysts","Hormones","Fats"],a:1}]},
+ {id:"chemistry",name:"Chemistry",icon:"⚗️",c:"#8a4dff",topics:["Atomic structure","Bonding","Quantitative chemistry","Rates of reaction","Organic chemistry","Periodic table","Acids & alkalis"],
+  advice:["Memorise the reactivity series and the periodic table groups.","Practise balancing equations until it's automatic.","Learn the required practicals step by step."],
+  qs:[{t:"Atomic structure",q:"What is the chemical symbol for sodium?",o:["S","So","Na","Sd"],a:2},{t:"Acids & alkalis",q:"An acid has a pH…",o:["Below 7","Exactly 7","Above 7","Above 14"],a:0},{t:"Atomic structure",q:"Protons have a charge of…",o:["Negative","Neutral","Positive","Variable"],a:2},{t:"Periodic table",q:"Group 1 metals are called…",o:["Halogens","Noble gases","Alkali metals","Transition metals"],a:2}]},
+ {id:"physics",name:"Physics",icon:"⚡",c:"#e5484d",topics:["Forces","Energy","Electricity","Waves","Particles"],
+  advice:["Learn the equations and their units.","Always write the formula, substitute, then calculate.","Check your answer is sensible (a car at 3000 m/s is wrong)."],
+  qs:[{t:"Forces",q:"Speed = distance ÷ …",o:["Mass","Time","Force","Acceleration"],a:1},{t:"Forces",q:"The unit of force is the…",o:["Joule","Watt","Newton","Pascal"],a:2},{t:"Waves",q:"Light travels fastest in…",o:["Water","Glass","Air","A vacuum"],a:3},{t:"Electricity",q:"Voltage = current × …",o:["Resistance","Power","Charge","Energy"],a:0}]},
+ {id:"history",name:"History",icon:"📜",c:"#b45309",topics:["Medicine through time","Elizabethan England","Cold War","Weimar & Nazi Germany","Norman England"],
+  advice:["Build a timeline for each topic, then explain why events happened.","Practise 'how far do you agree' essays with a clear argument.","Use specific evidence: names, dates and statistics."],
+  qs:[{t:"Weimar & Nazi Germany",q:"Who became Chancellor of Germany in 1933?",o:["Stresemann","Hitler","Bismarck","Kaiser Wilhelm"],a:1},{t:"Elizabethan England",q:"Who was queen of England from 1558 to 1603?",o:["Mary I","Victoria","Elizabeth I","Anne"],a:2},{t:"Norman England",q:"The Battle of Hastings took place in…",o:["1066","1215","1415","1485"],a:0},{t:"Medicine through time",q:"Who discovered penicillin in 1928?",o:["Louis Pasteur","Alexander Fleming","Edward Jenner","Joseph Lister"],a:1}]},
+ {id:"geography",name:"Geography",icon:"🌍",c:"#2e9e4f",topics:["Rivers & coasts","Weather & climate","Urban issues","Ecosystems","Natural hazards"],
+  advice:["Learn case studies with specific facts and figures.","Practise reading maps, graphs and grid references.","Use point, evidence, explain in longer answers."],
+  qs:[{t:"Natural hazards",q:"The boundary where two tectonic plates meet is called a…",o:["Plate margin","Watershed","Delta","Meander"],a:0},{t:"Rivers & coasts",q:"What is the start of a river called?",o:["Source","Mouth","Tributary","Confluence"],a:0},{t:"Weather & climate",q:"Which gas is the main cause of the enhanced greenhouse effect?",o:["Oxygen","Nitrogen","Carbon dioxide","Helium"],a:2},{t:"Ecosystems",q:"Tropical rainforests are found near the…",o:["Poles","Equator","Arctic Circle","Antarctic Circle"],a:1},{t:"Urban issues",q:"Growth in the share of people living in towns and cities is called…",o:["Urbanisation","Deforestation","Desertification","Globalisation"],a:0}]},
+ {id:"computing",name:"Computer Science",icon:"💻",c:"#0ea5e9",topics:["Algorithms","Programming","Data representation","Networks","Cyber security"],
+  advice:["Write code by hand to prepare for paper exams.","Trace algorithms line by line using a table.","Learn key terms: variable, iteration, selection, abstraction."],
+  qs:[{t:"Data representation",q:"How many bits are in a byte?",o:["4","8","16","32"],a:1},{t:"Programming",q:"A loop that repeats code is an example of…",o:["Selection","Iteration","Abstraction","Compilation"],a:1},{t:"Algorithms",q:"Which search algorithm needs the list to be sorted first?",o:["Linear search","Binary search","Random search","Serial search"],a:1},{t:"Networks",q:"What does 'IP' stand for in 'IP address'?",o:["Internet Protocol","Internal Program","Input Port","Intelligent Processor"],a:0},{t:"Cyber security",q:"A fake email pretending to be from a bank to steal your details is called…",o:["Phishing","Defragging","Streaming","Debugging"],a:0}]},
+ {id:"french",name:"French",icon:"🇫🇷",c:"#e11d74",topics:["Vocabulary","Verbs & tenses","Listening","Speaking","Writing"],
+  advice:["Learn vocabulary little and often with flashcards.","Practise the present, perfect and future tenses.","Read your writing aloud to spot mistakes."],
+  qs:[{t:"Vocabulary",q:"What does 'bonjour' mean?",o:["Goodbye","Hello","Thank you","Please"],a:1},{t:"Vocabulary",q:"How do you say 'thank you' in French?",o:["S'il vous plaît","Merci","Pardon","Bonsoir"],a:1},{t:"Verbs & tenses",q:"'Je suis' means…",o:["I have","I am","I go","I want"],a:1},{t:"Vocabulary",q:"What is 'cat' in French?",o:["Chien","Chat","Cheval","Oiseau"],a:1},{t:"Verbs & tenses",q:"'J'ai mangé' is in which tense?",o:["Present","Perfect (past)","Future","Imperative"],a:1}]},
+ {id:"business",name:"Business",icon:"💼",c:"#d97706",topics:["Enterprise","Marketing","Finance","Operations","Human resources"],
+  advice:["Learn key formulas: revenue, profit and break-even.","Link every answer to the business in the question.","Develop points with 'which means…' to earn extra marks."],
+  qs:[{t:"Finance",q:"Revenue minus costs equals…",o:["Profit","Interest","Capital","Tax"],a:0},{t:"Enterprise",q:"Someone who takes a risk to start a business is an…",o:["Employee","Entrepreneur","Consumer","Supplier"],a:1},{t:"Marketing",q:"The 4 Ps of marketing are product, price, place and…",o:["People","Promotion","Profit","Planning"],a:1},{t:"Finance",q:"Selling price × number sold gives…",o:["Total cost","Revenue","Profit","Break-even"],a:1},{t:"Human resources",q:"Recruiting and training staff is part of…",o:["Marketing","Operations","Human resources","Finance"],a:2}]}
+];
+const METHODS=[
+ ["🔁","Active recall","Close the book and write down everything you remember, then check what you missed."],
+ ["⏰","Spaced repetition","Review a topic after 1 day, 3 days, 1 week and 2 weeks so it sticks."],
+ ["🍅","Pomodoro","Work for 25 minutes, then rest for 5. Use the Study Timer."],
+ ["📝","Past papers","Do real papers under timed conditions, then mark them with the mark scheme."],
+ ["🧒","Feynman technique","Explain a topic out loud as if teaching a younger student. Gaps show up fast."],
+ ["🗂️","Flashcards","One question per card. Sort them into 'know' and 'don't know' piles."]
+];
+const ADVICE=[
+ ["Start with your weakest subject","Do it when you have the most energy, not last thing at night."],
+ ["Study in short, regular sessions","30–45 minutes a day beats one 5-hour cram the day before."],
+ ["Test yourself more than you re-read","Re-reading feels easy but teaches you less than quizzing yourself."],
+ ["Use the mark scheme","It shows exactly what examiners want. Copy its wording in your answers."],
+ ["Sleep and breaks matter","Memory is stored while you sleep. Aim for 8–9 hours before exams."],
+ ["Phone away, notifications off","Put it in another room while you study."],
+ ["Ask for help early","Tell your teacher the moment a topic doesn't make sense."],
+ ["Plan the week, not just the day","Mix subjects and leave one evening free."]
+];
+const AWARDS=[
+ ["🌱","First steps","Earn your first 10 XP",s=>s.xp>=10],
+ ["🧠","Quiz starter","Complete 1 quiz",s=>s.quizzes>=1],
+ ["💯","Perfect score","Get every answer right in a quiz",s=>s.perfect>=1],
+ ["⏱️","Focused","Finish 1 study session",s=>s.sessions>=1],
+ ["🔥","On a roll","Reach a 3-day streak",s=>s.streak>=3],
+ ["🚀","Level 5","Reach level 5 (400 XP)",s=>s.xp>=400],
+ ["✅","Organised","Tick off 5 tasks in your planner",s=>(s.tasks||[]).filter(t=>t.done).length>=5],
+ ["🏆","Level 10 passed","Pass all 1,000 tests in one subject",s=>Object.keys(s.path||{}).some(k=>s.path[k].done>=1000)],
+ ["🗂️","Card maker","Make 5 flashcards",s=>(s.cards||[]).length>=5],
+ ["🧭","Explorer","Try quiz questions in 5 different subjects",s=>new Set(Object.keys(s.weak||{}).map(k=>k.split("|")[0])).size>=5]
+];
+
+/* ===== TIMER ===== */
+let timerSeconds=25*60,timerRunning=false,timerInterval=null;
+function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function paintTimer(){const e=document.getElementById("tm");if(e)e.textContent=fmt(timerSeconds);document.title=timerRunning?fmt(timerSeconds)+" · Gradeo":"Gradeo — GCSE Study"}
+function toggleTimer(){
+  if(timerRunning){clearInterval(timerInterval);timerRunning=false;render();return}
+  timerRunning=true;
+  timerInterval=setInterval(()=>{
+    timerSeconds--;paintTimer();
+    if(timerSeconds<=0){
+      clearInterval(timerInterval);timerRunning=false;timerSeconds=timerLen;
+      if(timerXP>0){state.sessions++;addXP(timerXP);toast("Session complete! +"+timerXP+" XP")}else toast("Break over. Back to it!");
+      document.title="Gradeo — GCSE Study";render();
+    }
+  },1000);
+  render();
+}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerSeconds=timerLen;document.title="Gradeo — GCSE Study";render()}
+
+/* ===== MORE QUESTIONS, EXPLANATIONS, NEW SUBJECTS ===== */
+const Q=(t,q,o,a,e)=>({t:t,q:q,o:o,a:a,e:e});
+const EXPL=[
+["3x + 5 = 20","Subtract 5 from both sides to get 3x = 15, then divide by 3, so x = 5."],
+["15% of 80","10% of 80 is 8 and 5% is 4, so 15% is 8 + 4 = 12."],
+["angles in a triangle","The three angles in any triangle always add up to 180°."],
+["mean of 2, 4, 6, 8","Add the values (2 + 4 + 6 + 8 = 20) and divide by how many there are (4), so the mean is 5."],
+["imitates a sound","Onomatopoeia is a word that sounds like what it describes, such as 'buzz' or 'crash'."],
+["Macbeth","William Shakespeare wrote Macbeth, probably around 1606."],
+["as brave as a lion","A simile compares two things using 'like' or 'as'. A metaphor would say she IS a lion."],
+["same starting sound","Alliteration is repeating the same sound at the start of nearby words, like 'sally sells seashells'."],
+["releases energy in a cell","Mitochondria release energy from glucose during aerobic respiration."],
+["Photosynthesis produces","Carbon dioxide + water → glucose + oxygen, using energy from light."],
+["DNA is found","DNA is stored in the nucleus, where it is packaged into chromosomes."],
+["Enzymes are","Enzymes speed up reactions in living things without being used up, so they are biological catalysts."],
+["symbol for sodium","The symbol Na comes from natrium, the Latin name for sodium."],
+["An acid has a pH","The pH scale runs from 0 to 14. Acids are below 7, neutral is exactly 7 and alkalis are above 7."],
+["Protons have","Protons have a relative charge of +1. Electrons are −1 and neutrons are 0."],
+["Group 1 metals","Lithium, sodium and potassium are alkali metals because they react with water to make alkaline solutions."],
+["Speed = distance","Speed = distance ÷ time. For example, 100 m in 10 s is 10 m/s."],
+["unit of force","Force is measured in newtons (N), named after Isaac Newton."],
+["Light travels fastest","Light travels fastest in a vacuum, at about 300,000 km every second. It slows down in air, water and glass."],
+["Voltage = current","From Ohm's law, V = I × R, so voltage equals current multiplied by resistance."],
+["Chancellor of Germany","President Hindenburg appointed Hitler as Chancellor in January 1933, and the Nazis then built a dictatorship."],
+["queen of England","Elizabeth I reigned for 45 years, from 1558 to 1603."],
+["Battle of Hastings","William of Normandy defeated King Harold at the Battle of Hastings in 1066."],
+["penicillin","Alexander Fleming noticed in 1928 that mould killed bacteria, which led to the first antibiotic."],
+["tectonic plates meet","Plate margins are where tectonic plates meet, and earthquakes and volcanoes are common there."],
+["start of a river","A river starts at its source, often in hills or mountains, and ends at its mouth."],
+["enhanced greenhouse","Carbon dioxide from burning fossil fuels traps extra heat in the atmosphere."],
+["Tropical rainforests","Tropical rainforests grow near the equator, where it is hot and wet all year."],
+["share of people living","Urbanisation is the increase in the share of people living in towns and cities."],
+["bits are in a byte","A bit is a single 1 or 0, and 8 bits make a byte."],
+["loop that repeats","Iteration means repeating a set of instructions, using loops such as FOR or WHILE."],
+["needs the list to be sorted","Binary search keeps halving a sorted list, so it only works if the data is in order."],
+["'IP' stand for","IP stands for Internet Protocol, the rules that give each device an address on a network."],
+["fake email pretending","Phishing uses fake emails or messages to trick people into giving away passwords or bank details."],
+["'bonjour' mean","'Bonjour' means hello or good day."],
+["'thank you' in French","'Merci' means thank you. 'S'il vous plaît' means please."],
+["'Je suis'","'Je suis' comes from être (to be), so it means 'I am'."],
+["'cat' in French","'Un chat' is a cat and 'un chien' is a dog."],
+["mangé","'J'ai mangé' means 'I ate' or 'I have eaten'. It is avoir plus a past participle, which is the perfect tense."],
+["Revenue minus costs","Profit = revenue − costs. If costs are bigger than revenue, it is a loss."],
+["takes a risk to start","An entrepreneur spots an opportunity and takes the risk of starting a business."],
+["4 Ps of marketing","The marketing mix is product, price, place and promotion."],
+["Selling price ×","Revenue = selling price × quantity sold."],
+["Recruiting and training","The HR function covers recruiting, training and looking after staff."]
+];
+const EXTRA={
+maths:[
+Q("Algebra","Expand 2(x + 3)",["2x + 3","2x + 6","x + 6","2x + 5"],1,"Multiply every term inside the bracket by 2: 2 × x = 2x and 2 × 3 = 6."),
+Q("Probability","A fair coin is flipped. What is the probability of heads?",["1/4","1/3","1/2","1"],2,"There are 2 equally likely outcomes and 1 of them is heads, so the probability is 1/2."),
+Q("Geometry","What is the area of a rectangle 5 cm by 3 cm?",["8 cm²","15 cm²","16 cm²","30 cm²"],1,"Area of a rectangle = length × width = 5 × 3 = 15 cm²."),
+Q("Ratio & proportion","Share £20 in the ratio 3 : 2. What is the larger share?",["£8","£10","£12","£15"],2,"3 + 2 = 5 parts, so one part is £4. The larger share is 3 × £4 = £12.")],
+english:[
+Q("Language Paper 1","Giving human qualities to an object is called…",["Personification","Onomatopoeia","Hyperbole","Assonance"],0,"Personification gives human actions or feelings to non-human things, like 'the wind whispered'."),
+Q("19th-century novel","Who wrote 'A Christmas Carol'?",["Charles Dickens","Jane Austen","Thomas Hardy","Mary Shelley"],0,"Charles Dickens wrote A Christmas Carol in 1843."),
+Q("Language Paper 2","Deliberate exaggeration for effect is called…",["Hyperbole","Simile","Rhyme","Irony"],0,"Hyperbole is deliberate exaggeration, like 'I've told you a million times'."),
+Q("Poetry","A poem with 14 lines is usually called a…",["Haiku","Sonnet","Limerick","Ballad"],1,"A sonnet has 14 lines. A haiku has 3 lines and a limerick has 5.")],
+biology:[
+Q("Infection & response","Which of these diseases is caused by a virus?",["Measles","Scurvy","Diabetes","Rickets"],0,"Measles is caused by a virus. Scurvy and rickets come from lacking vitamins, and diabetes is a problem controlling blood sugar."),
+Q("Cells","Which part is found in a plant cell but not an animal cell?",["Cell wall","Nucleus","Cytoplasm","Cell membrane"],0,"Plant cells have a cellulose cell wall, chloroplasts and a permanent vacuole. Animal cells do not."),
+Q("Organisation","Which organ pumps blood around the body?",["Lungs","Heart","Liver","Kidney"],1,"The heart is a muscular pump that sends blood to the lungs and around the body."),
+Q("Inheritance","How many chromosomes are in a normal human body cell?",["23","46","48","92"],1,"Human body cells have 23 pairs of chromosomes, which makes 46 in total.")],
+chemistry:[
+Q("Bonding","What type of bond forms when atoms share electrons?",["Ionic","Covalent","Metallic","Hydrogen"],1,"A covalent bond forms when atoms share pairs of electrons, usually between non-metals."),
+Q("Quantitative chemistry","What is the relative atomic mass (Ar) of carbon?",["6","12","14","16"],1,"The most common form of carbon is carbon-12, so its relative atomic mass is 12. The number 6 is its atomic number."),
+Q("Organic chemistry","Which alkane has one carbon atom?",["Methane","Ethane","Propane","Butane"],0,"Alkane names start meth- (1 carbon), eth- (2), prop- (3) and but- (4)."),
+Q("Rates of reaction","Which change usually makes a reaction go faster?",["Lowering the temperature","Raising the temperature","Using bigger lumps","Diluting the acid"],1,"Higher temperature makes particles move faster, so they collide more often and with more energy.")],
+physics:[
+Q("Energy","What is the unit of energy?",["Newton","Joule","Watt","Volt"],1,"Energy is measured in joules (J). A watt measures power, which is joules per second."),
+Q("Particles","What is the charge of an electron?",["Positive","Negative","Neutral","It varies"],1,"Electrons carry a negative charge. Protons are positive and neutrons are neutral."),
+Q("Waves","What is the unit of frequency?",["Metre","Hertz","Decibel","Joule"],1,"Frequency is the number of waves per second, measured in hertz (Hz)."),
+Q("Electricity","In a series circuit, the current is…",["The same everywhere","Bigger near the battery","Zero","Split between branches"],0,"A series circuit has only one path, so the same current flows through every component.")],
+history:[
+Q("Cold War","Why was the Berlin Wall built in 1961?",["To stop people leaving East Berlin","To protect against floods","To mark a new city centre","To keep soldiers out of West Germany"],0,"East Germany built the wall to stop its people escaping to West Berlin."),
+Q("Cold War","Which two superpowers were the main rivals in the Cold War?",["USA and USSR","UK and France","China and Japan","Germany and Italy"],0,"The USA and the Soviet Union competed for influence without fighting each other directly."),
+Q("Medicine through time","Edward Jenner developed a vaccine against which disease?",["Smallpox","Cholera","Plague","Polio"],0,"In 1796 Jenner used cowpox to protect people from smallpox."),
+Q("Norman England","What was the Domesday Book?",["A survey of land and wealth","A list of laws","A diary of William I","A map of castles"],0,"William I ordered the survey in 1086 to record who owned what, so he could tax it."),
+Q("Elizabethan England","Which fleet attacked England in 1588?",["The Spanish Armada","The French navy","The Dutch fleet","Viking longships"],0,"Philip II of Spain sent the Armada in 1588, and the English navy and bad weather defeated it.")],
+geography:[
+Q("Rivers & coasts","Which process wears away a coastline using rocks thrown by waves?",["Abrasion","Deposition","Evaporation","Condensation"],0,"In abrasion, waves hurl pebbles and sand at the cliff and wear it away."),
+Q("Weather & climate","Rain that forms when air is forced up over hills is called…",["Relief rainfall","Convectional rainfall","Frontal rainfall","Acid rain"],0,"Relief rainfall happens when moist air rises over high ground, cools, condenses and falls as rain."),
+Q("Natural hazards","Where do most earthquakes and volcanoes happen?",["Along plate boundaries","In the middle of plates","Only at the equator","Only in deserts"],0,"Most happen at plate margins, where tectonic plates move against each other."),
+Q("Urban issues","What is a megacity?",["A city with over 10 million people","Any capital city","A city with a big port","A city built in the last 10 years"],0,"A megacity has more than 10 million people, such as Tokyo or Lagos.")],
+computing:[
+Q("Data representation","What is the binary number 101 in decimal?",["3","4","5","6"],2,"101 in binary is 4 + 0 + 1 = 5."),
+Q("Programming","Which data type would you use to store the word 'hello'?",["Integer","String","Boolean","Real"],1,"A string stores text. Integers store whole numbers and Booleans store True or False."),
+Q("Algorithms","What does a diamond shape mean in a flowchart?",["A decision","Start or end","An input","A process"],0,"A diamond is a decision, where the flow splits depending on yes/no or true/false."),
+Q("Networks","Which device sends data between networks?",["Router","Monitor","Printer","Keyboard"],0,"A router sends data packets to the right network, such as from your home to the internet.")],
+french:[
+Q("Vocabulary","What is 'apple' in French?",["Pomme","Poire","Banane","Orange"],0,"'Une pomme' is an apple. 'Poire' means pear."),
+Q("Verbs & tenses","Which phrase means 'I have'?",["J'ai","Je suis","Je vais","Je fais"],0,"'Avoir' means to have, so 'j'ai' means 'I have'."),
+Q("Vocabulary","What does 'au revoir' mean?",["Goodbye","Welcome","Sorry","Please"],0,"'Au revoir' means goodbye. It literally means 'until we see again'."),
+Q("Vocabulary","'Trois' is the number…",["2","3","4","5"],1,"Un, deux, trois: 'trois' is three.")],
+business:[
+Q("Finance","Fixed costs are costs that…",["Stay the same whatever you produce","Rise with every item made","Only happen once","Are paid by customers"],0,"Fixed costs, such as rent, stay the same whatever the output. Variable costs change with output."),
+Q("Marketing","Splitting customers into groups with similar needs is called…",["Market segmentation","Break-even","Recruitment","Delegation"],0,"Market segmentation helps a business target the right customers, for example by age or income."),
+Q("Operations","Making identical products in large numbers on a production line is…",["Mass production","Job production","Outsourcing","Franchising"],0,"Mass production makes large quantities of identical products, which lowers the cost of each one."),
+Q("Enterprise","Money put in to set up a new business is called…",["Start-up capital","Revenue","Wages","Tax"],0,"Start-up capital is the money needed to set a business up before it starts earning.")]
+};
+const NEW_SUBJECTS=[
+{id:"spanish",name:"Spanish",icon:"🇪🇸",c:"#dc2626",topics:["Vocabulary","Verbs & tenses","Listening","Speaking","Writing"],
+ advice:["Learn new words little and often with flashcards.","Practise ser and estar until you can pick the right one quickly.","Say your answers out loud to get ready for speaking exams."],
+ qs:[Q("Vocabulary","What does 'hola' mean?",["Hello","Goodbye","Thanks","Sorry"],0,"'Hola' means hello. The 'h' is silent, so it sounds like 'OH-la'."),
+ Q("Vocabulary","How do you say 'thank you' in Spanish?",["Gracias","Por favor","Adiós","Lo siento"],0,"'Gracias' means thank you. 'Por favor' means please."),
+ Q("Vocabulary","What is 'dog' in Spanish?",["Gato","Perro","Pájaro","Caballo"],1,"'Perro' is a dog and 'gato' is a cat."),
+ Q("Verbs & tenses","'Tengo' means…",["I have","I am","I go","I eat"],0,"'Tengo' comes from tener (to have), so it means 'I have'."),
+ Q("Verbs & tenses","Which verb means 'to be' for permanent things like nationality?",["Ser","Estar","Tener","Hacer"],0,"'Ser' is for identity and lasting features. 'Estar' is for location and temporary states."),
+ Q("Vocabulary","What is 'seven' in Spanish?",["Siete","Seis","Ocho","Nueve"],0,"Uno, dos, tres, cuatro, cinco, seis, siete: 'siete' is seven.")]},
+{id:"rs",name:"Religious Studies",icon:"🕊️",c:"#475569",topics:["Beliefs and teachings","Practices","Ethics","Philosophy","Relationships"],
+ advice:["Learn key terms and use them correctly in your answers.","Give more than one viewpoint when a question asks you to evaluate.","Back up points with a teaching or a source of authority."],
+ qs:[Q("Beliefs and teachings","What is the holy book of Islam?",["The Qur'an","The Torah","The Bible","The Vedas"],0,"The Qur'an is the holy book of Islam, which Muslims believe was revealed to the Prophet Muhammad."),
+ Q("Beliefs and teachings","What is the central holy scripture of Sikhism called?",["Guru Granth Sahib","Tripitaka","Torah","Bhagavad Gita"],0,"The Guru Granth Sahib is the central holy scripture of Sikhism."),
+ Q("Practices","What is the Jewish day of rest called?",["Shabbat","Diwali","Ramadan","Easter"],0,"Shabbat runs from Friday evening to Saturday evening."),
+ Q("Beliefs and teachings","Belief in one God is called…",["Monotheism","Polytheism","Atheism","Agnosticism"],0,"Mono means one, so monotheism is belief in one God. Polytheism is belief in many gods."),
+ Q("Philosophy","Someone who believes there is no God is called an…",["Atheist","Agnostic","Polytheist","Pilgrim"],0,"An atheist does not believe in God. An agnostic says it is not possible to know."),
+ Q("Ethics","Judging actions by whether they bring the most happiness is called…",["Utilitarianism","Pacifism","Fundamentalism","Secularism"],0,"Utilitarianism judges actions by their results, aiming for the greatest happiness for the most people.")]},
+{id:"pe",name:"Physical Education",icon:"🏃",c:"#0d9488",topics:["Anatomy & physiology","Fitness & training","Skills","Health & wellbeing","Sports psychology"],
+ advice:["Link every training method to the fitness component it improves.","Use the correct muscle and bone names in your answers.","Practise applying theory to a sport you actually play."],
+ qs:[Q("Anatomy & physiology","Which muscle is at the front of the upper leg?",["Quadriceps","Hamstring","Biceps","Deltoid"],0,"The quadriceps are at the front of the thigh. The hamstrings are at the back."),
+ Q("Anatomy & physiology","Which type of joint is the shoulder?",["Ball and socket","Hinge","Pivot","Gliding"],0,"The shoulder and hip are ball and socket joints, which allow movement in many directions."),
+ Q("Fitness & training","What does FITT stand for?",["Frequency, Intensity, Time, Type","Fitness, Intensity, Training, Time","Frequency, Impact, Type, Tempo","Force, Intensity, Time, Type"],0,"FITT is frequency, intensity, time and type, the four things you can change to progress your training."),
+ Q("Health & wellbeing","Which nutrient is the body's main source of energy?",["Carbohydrates","Protein","Vitamins","Fibre"],0,"Carbohydrates are broken down into glucose, which fuels the body, especially during exercise."),
+ Q("Skills","Which is an example of a closed skill?",["A free throw in basketball","Dribbling past a defender","Passing in a rugby match","Tackling in football"],0,"A closed skill happens in a stable, predictable environment, like a free throw or a golf swing."),
+ Q("Fitness & training","Which fitness component is the range of movement at a joint?",["Flexibility","Strength","Power","Agility"],0,"Flexibility is how far a joint can move. Stretching helps improve it.")]},
+{id:"art",name:"Art & Design",icon:"🎨",c:"#8b5cf6",topics:["Drawing","Colour theory","Printmaking","Artists & movements","Sculpture"],
+ advice:["Keep a sketchbook and record your ideas as you go.","Explain why you made each choice, not just what you did.","Research artists and link their ideas to your own work."],
+ qs:[Q("Colour theory","Which are the three primary colours in painting?",["Red, yellow, blue","Red, green, blue","Orange, green, purple","Black, white, grey"],0,"In traditional painting, red, yellow and blue are mixed to make other colours. Red, green and blue are the primaries of light."),
+ Q("Colour theory","Mixing red and yellow makes…",["Orange","Green","Purple","Brown"],0,"Red + yellow = orange. Blue + yellow = green. Red + blue = purple."),
+ Q("Colour theory","Which colour is opposite blue on the colour wheel?",["Orange","Green","Purple","Red"],0,"Complementary colours sit opposite each other on the wheel, and blue's complement is orange."),
+ Q("Artists & movements","Who painted 'The Starry Night'?",["Vincent van Gogh","Claude Monet","Pablo Picasso","Leonardo da Vinci"],0,"Vincent van Gogh painted The Starry Night in 1889."),
+ Q("Drawing","What does pressing harder with a pencil usually make?",["A darker line","A lighter line","A thinner line","A blurred line"],0,"Pressing harder lays down more graphite, giving a darker tone. That is how you build up shading."),
+ Q("Printmaking","Which of these is a printmaking technique?",["Lino printing","Watercolour wash","Charcoal blending","Clay coiling"],0,"In lino printing you carve a design into a lino block, ink it and press it onto paper.")]}
+];
+SUBJECTS.forEach(sub=>{(EXTRA[sub.id]||[]).forEach(q=>sub.qs.push(q))});
+NEW_SUBJECTS.forEach(sub=>SUBJECTS.push(sub));
+SUBJECTS.forEach(sub=>sub.qs.forEach(q=>{if(!q.e){const m=EXPL.find(x=>q.q.indexOf(x[0])!==-1);if(m)q.e=m[1]}}));
+
+/* ===== QUIZ ===== */
+function prep(q,sub){return diffWrap(prep0(q,sub))}
+function prep0(q,sub){
+  const idx=q.o.map((_,i)=>i).sort(()=>Math.random()-.5);
+  return Object.assign({},q,{o:idx.map(i=>q.o[i]),a:idx.indexOf(q.a),sid:sub.id,sn:sub.name,saved:false});
+}
+function newQuiz(list,label,again,max){
+  return{s:label,i:0,score:0,picked:null,missed:[],qs:list.sort(()=>Math.random()-.5).slice(0,max||15),again:again,hard:state.diff==="hard",xpq:{easy:5,normal:10,hard:15}[state.diff||"normal"]};
+}
+function startQuiz(id,ti){
+  const sub=SUBJECTS.find(x=>x.id===id);if(!sub)return;
+  const topic=(ti===undefined||ti===null)?null:sub.topics[ti];
+  PATHL=3;
+  quiz=newQuiz(buildTest(sub,15,topic),{id:sub.id,name:topic?sub.name+" · "+topic:sub.name},{kind:"subject",id:id,ti:ti},15);
+  go("quiz");
+}
+function startMixed(){
+  const pool=[];SUBJECTS.forEach(sub=>sub.qs.concat(pairQs(sub)).forEach(q=>pool.push(prep(q,sub))));
+  quiz=newQuiz(pool,{id:"mixed",name:"Mixed challenge"},{kind:"mixed"},20);go("quiz");
+}
+function startMistakes(){
+  const pool=(state.miss||[]).map(m=>{const sub=SUBJECTS.find(x=>x.id===m.s);const q=sub&&sub.qs.find(x=>x.q===m.q);return q?prep(q,sub):null}).filter(Boolean);
+  if(!pool.length)return toast("No mistakes to fix yet. Take a quiz first!");
+  quiz=newQuiz(pool,{id:"miss",name:"Fix my mistakes"},{kind:"miss"});go("quiz");
+}
+function replayQuiz(){
+  const a=quiz&&quiz.again;if(!a)return go("quiz");
+  if(a.kind==="mixed")startMixed();else if(a.kind==="miss")startMistakes();else if(a.kind==="path")startPath(a.id);else startQuiz(a.id,a.ti);
+}
+function trackMiss(q,ok){
+  state.miss=state.miss||[];
+  const i=state.miss.findIndex(m=>m.s===q.sid&&m.q===q.q);
+  if(!ok&&i<0){state.miss.push({s:q.sid,q:q.q});if(state.miss.length>60)state.miss.shift()}
+  if(ok&&i>=0)state.miss.splice(i,1);
+  persist();
+}
+function pick(n){
+  if(quiz.picked!==null)return;
+  quiz.picked=n;
+  const q=quiz.qs[quiz.i],ok=n===q.a;
+  if(ok)quiz.score++;
+  recordTopic(q.sid,q.t,ok);
+  trackMiss(q,ok);
+  if(!ok&&q.t&&!quiz.missed.some(m=>m.sid===q.sid&&m.t===q.t))quiz.missed.push({sid:q.sid,sn:q.sn,t:q.t});
+  render();
+}
+function explainHTML(q,ok){
+  return `<div class="explain ${ok?"good":"bad"}"><b>${ok?"✅ Correct!":"❌ Not quite."}</b>${ok?"":` The answer is <b>${escapeHTML(q.o[q.a])}</b>.`}${q.e?`<p>${escapeHTML(q.e)}</p>`:""}
+  <div class="small">Topic: ${escapeHTML(q.t||"General")}</div>
+  <div class="lnks" style="margin-top:10px">${ok?"":helpLinks(q.sn,q.t||"")}${q.saved?`<span class="lnk">✓ Saved</span>`:`<button class="lnk" onclick="cardFromQ()">🗂️ Save as flashcard</button>`}</div></div>`;
+}
+function cardFromQ(){
+  const q=quiz&&quiz.qs[quiz.i];if(!q||q.saved)return;
+  state.cards.push({id:uid(),sub:q.sid,f:q.q,b:q.o[q.a]+(q.e?". "+q.e:""),k:false});
+  q.saved=true;persist();toast("Saved to your flashcards.");render();
+}
+function nextQ(){
+  quiz.i++;quiz.picked=null;quiz.armed=-1;
+  if(quiz.i>=quiz.qs.length){
+    state.quizzes++;
+    if(quiz.score===quiz.qs.length)state.perfect++;
+    addXP(quiz.score*(quiz.xpq||10));
+    if(quiz.again&&quiz.again.kind==="path")finishPath();
+  }
+  render();
+}
+
+
+/* ===== STRUGGLING TOPICS + HELP LINKS ===== */
+function recordTopic(sid,t,ok){
+  if(!t)return;
+  state.weak=state.weak||{};
+  const k=sid+"|"+t,r=state.weak[k]||{r:0,w:0};
+  if(ok)r.r++;else r.w++;
+  state.weak[k]=r;
+  persist();
+}
+function weakTopics(){
+  return Object.keys(state.weak||{}).map(k=>{
+    const p=k.split("|"),r=state.weak[k],s=SUBJECTS.find(x=>x.id===p[0]);
+    return s?{s:s,t:p.slice(1).join("|"),w:r.w,r:r.r}:null;
+  }).filter(x=>x&&x.w>x.r).sort((a,b)=>(b.w-b.r)-(a.w-a.r));
+}
+function helpLinks(subject,topic){
+  const q=encodeURIComponent("GCSE "+subject+" "+topic);
+  return `<a class="lnk yt" href="https://www.youtube.com/results?search_query=${q}%20explained" target="_blank" rel="noopener noreferrer">▶ YouTube</a><a class="lnk gg" href="https://www.google.com/search?q=${q}%20revision" target="_blank" rel="noopener noreferrer">🔎 Google</a>`;
+}
+function helpRow(subject,topic,note){
+  return `<div class="help"><div><b>${escapeHTML(topic)}</b><div class="small">${escapeHTML(subject)}${note?" · "+note:""}</div></div><div class="lnks">${helpLinks(subject,topic)}</div></div>`;
+}
+function struggleCard(items,title,intro){
+  return `<div class="card struggle"><h3>${title}</h3><p class="small">${intro}</p>${items.join("")}</div>`;
+}
+
+
+/* ===== PLANNER ===== */
+const PRESET_SECS=[
+ {id:"homework",name:"Homework",icon:"📝"},
+ {id:"revision",name:"Revision",icon:"📖"},
+ {id:"tests",name:"Tests & exams",icon:"🎯"},
+ {id:"projects",name:"Projects",icon:"🧩"},
+ {id:"reading",name:"Reading",icon:"📚"}
+];
+const PRI={high:["🔴","High"],med:["🟡","Medium"],low:["🟢","Low"]};
+let pl={sec:"all",filter:"todo",newSec:false};
+function allSecs(){return PRESET_SECS.concat(state.secs||[])}
+function secOf(id){return allSecs().find(x=>x.id===id)||PRESET_SECS[0]}
+function isCustom(id){return(state.secs||[]).some(x=>x.id===id)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function daysUntil(due){
+  if(!due)return null;
+  const p=due.split("-").map(Number);if(p.length!==3||p.some(isNaN))return null;
+  const a=new Date(p[0],p[1]-1,p[2]),n=new Date();n.setHours(0,0,0,0);
+  return Math.round((a-n)/864e5);
+}
+function dueLabel(t){
+  const d=daysUntil(t.due);if(d===null)return"";
+  if(t.done)return"📅 "+t.due;
+  if(d<0)return"⚠️ Overdue by "+(-d)+(d===-1?" day":" days");
+  if(d===0)return"🔥 Due today";
+  if(d===1)return"⏰ Due tomorrow";
+  if(d<=7)return"📅 Due in "+d+" days";
+  return"📅 "+t.due;
+}
+function dueClass(t){const d=daysUntil(t.due);if(t.done||d===null)return"";return d<0?"over":d<=1?"soon":""}
+function sortTasks(a,b){
+  if(a.done!==b.done)return a.done?1:-1;
+  const da=a.due||"9999",db=b.due||"9999";
+  if(da!==db)return da<db?-1:1;
+  const o={high:0,med:1,low:2};return(o[a.pri]||1)-(o[b.pri]||1);
+}
+function addTask(){
+  const ti=document.getElementById("tkT"),title=ti.value.trim();
+  if(!title){toast("Type what you need to do first.");ti.focus();return}
+  state.tasks.push({id:uid(),title:title.slice(0,120),sec:document.getElementById("tkS").value,
+    subject:document.getElementById("tkSub").value,due:document.getElementById("tkD").value,
+    pri:document.getElementById("tkP").value,done:false,xp:false});
+  persist();toast("Task added.");render();
+  const n=document.getElementById("tkT");if(n)n.focus();
+}
+function toggleTask(id){
+  const t=state.tasks.find(x=>x.id===id);if(!t)return;
+  t.done=!t.done;
+  if(t.done&&!t.xp){t.xp=true;addXP(5);toast("Nice one! +5 XP");}
+  persist();render();
+}
+function delTask(id){state.tasks=state.tasks.filter(x=>x.id!==id);persist();render()}
+function clearDone(){
+  const n=state.tasks.filter(t=>t.done&&(pl.sec==="all"||t.sec===pl.sec)).length;
+  if(!n)return toast("No finished tasks to clear.");
+  if(!confirm("Remove "+n+" finished task"+(n===1?"":"s")+"?"))return;
+  state.tasks=state.tasks.filter(t=>!(t.done&&(pl.sec==="all"||t.sec===pl.sec)));persist();render();
+}
+function addSection(){
+  const n=document.getElementById("scN").value.trim(),i=document.getElementById("scI").value.trim();
+  if(!n){toast("Give your section a name.");return}
+  if(allSecs().some(x=>x.name.toLowerCase()===n.toLowerCase()))return toast("You already have a section called that.");
+  const sec={id:"c_"+uid(),name:n.slice(0,24),icon:(i||"⭐").slice(0,4)};
+  state.secs.push(sec);persist();pl.sec=sec.id;pl.newSec=false;render();
+}
+function delSection(id){
+  const n=state.tasks.filter(t=>t.sec===id).length;
+  if(!confirm("Delete this section"+(n?" and its "+n+" task"+(n===1?"":"s"):"")+"?"))return;
+  state.secs=state.secs.filter(x=>x.id!==id);
+  state.tasks=state.tasks.filter(t=>t.sec!==id);
+  pl.sec="all";persist();render();
+}
+function taskRow(t){
+  const sec=secOf(t.sec),sub=SUBJECTS.find(x=>x.id===t.subject);
+  return `<div class="task ${t.done?"done":""}"><button class="tick" aria-label="${t.done?"Mark as not done":"Mark as done"}" onclick="toggleTask('${t.id}')">${t.done?"✓":""}</button>
+  <div class="tmain"><div class="ttl">${escapeHTML(t.title)}</div>
+  <div class="tmeta"><span>${sec.icon} ${escapeHTML(sec.name)}</span>${sub?`<span>${sub.icon} ${sub.name}</span>`:""}<span>${PRI[t.pri]?PRI[t.pri][0]:""}</span>${t.due?`<span class="due ${dueClass(t)}">${dueLabel(t)}</span>`:""}</div></div>
+  <button class="x" aria-label="Delete task" onclick="delTask('${t.id}')">✕</button></div>`;
+}
+function plannerHTML(){
+  const secs=allSecs(),tasks=state.tasks;
+  const total=tasks.length,done=tasks.filter(t=>t.done).length,pct=total?Math.round(done/total*100):0;
+  const over=tasks.filter(t=>!t.done&&daysUntil(t.due)!==null&&daysUntil(t.due)<0).length;
+  const today=tasks.filter(t=>!t.done&&daysUntil(t.due)===0).length;
+  let h=`<div class="card"><h3>Your progress</h3>
+   <div class="bar"><i style="width:${pct}%"></i></div>
+   <p class="small" style="margin:8px 0 0"><b>${done}</b> of <b>${total}</b> tasks done${total?" · "+pct+"%":""}${over?` · <span class="due over">${over} overdue</span>`:""}${today?` · <span class="due soon">${today} due today</span>`:""}</p></div>`;
+  h+=`<div class="card"><h3>Add a task</h3>
+   <div class="field"><label for="tkT">What do you need to do?</label><input id="tkT" maxlength="120" placeholder="e.g. Finish algebra worksheet" onkeydown="if(event.key==='Enter')addTask()"></div>
+   <div class="pgrid">
+    <div class="field"><label for="tkS">Section</label><select id="tkS">${secs.map(x=>`<option value="${x.id}" ${x.id===(pl.sec!=="all"&&pl.sec!=="notes"?pl.sec:"homework")?"selected":""}>${x.icon} ${escapeHTML(x.name)}</option>`).join("")}</select></div>
+    <div class="field"><label for="tkSub">Subject</label><select id="tkSub"><option value="">None</option>${SUBJECTS.map(x=>`<option value="${x.id}">${x.icon} ${x.name}</option>`).join("")}</select></div>
+    <div class="field"><label for="tkD">Due date</label><input id="tkD" type="date" min="2000-01-01"></div>
+    <div class="field"><label for="tkP">Priority</label><select id="tkP"><option value="high">🔴 High</option><option value="med" selected>🟡 Medium</option><option value="low">🟢 Low</option></select></div>
+   </div>
+   <div class="row"><button class="btn" onclick="addTask()">Add task</button><button class="btn secondary" onclick="document.getElementById('tkD').value='${ymd(new Date())}'">Due today</button><button class="btn secondary" onclick="(function(){const d=new Date();d.setDate(d.getDate()+1);document.getElementById('tkD').value=ymd(d)})()">Due tomorrow</button></div></div>`;
+  const cnt=id=>tasks.filter(t=>!t.done&&(id==="all"||t.sec===id)).length;
+  h+=`<div class="chips" role="tablist">
+   <button class="chip ${pl.sec==="all"?"on":""}" onclick="pl.sec='all';render()">All <b>${cnt("all")}</b></button>
+   ${secs.map(x=>`<button class="chip ${pl.sec===x.id?"on":""}" onclick="pl.sec='${x.id}';render()">${x.icon} ${escapeHTML(x.name)} <b>${cnt(x.id)}</b></button>`).join("")}
+   <button class="chip ${pl.sec==="notes"?"on":""}" onclick="pl.sec='notes';render()">🗒️ Weekly notes</button>
+   <button class="chip add" onclick="pl.newSec=!pl.newSec;render()">＋ New section</button></div>`;
+  if(pl.newSec)h+=`<div class="card"><h3>Make your own section</h3><div class="pgrid"><div class="field"><label for="scI">Emoji</label><input id="scI" maxlength="4" placeholder="⭐"></div><div class="field" style="grid-column:span 2"><label for="scN">Name</label><input id="scN" maxlength="24" placeholder="e.g. Clubs, Coursework, Chores" onkeydown="if(event.key==='Enter')addSection()"></div></div><div class="row"><button class="btn" onclick="addSection()">Create section</button><button class="btn secondary" onclick="pl.newSec=false;render()">Cancel</button></div></div>`;
+  if(pl.sec==="notes"){
+    h+=`<div class="card"><h3>Weekly notes</h3><p class="small">Write what you'll revise each day. It saves as you type.</p><textarea id="plan" rows="12" placeholder="Mon: Maths algebra (45 min)&#10;Tue: Biology cells (30 min)&#10;…" oninput="state.plan=this.value;save('gradeo_plan',this.value)">${escapeHTML(state.plan)}</textarea></div>`;
+    return h;
+  }
+  const f=pl.filter;
+  h+=`<div class="chips sm"><button class="chip ${f==="todo"?"on":""}" onclick="pl.filter='todo';render()">To do</button><button class="chip ${f==="done"?"on":""}" onclick="pl.filter='done';render()">Done</button><button class="chip ${f==="all"?"on":""}" onclick="pl.filter='all';render()">Everything</button></div>`;
+  const show=sec=>tasks.filter(t=>(sec==="all"||t.sec===sec)&&(f==="all"||(f==="done")===t.done)).sort(sortTasks);
+  if(pl.sec==="all"){
+    let any=false;
+    secs.forEach(x=>{const l=show(x.id);if(!l.length)return;any=true;h+=`<div class="card"><h3>${x.icon} ${escapeHTML(x.name)}</h3>${l.map(taskRow).join("")}</div>`});
+    if(!any)h+=`<div class="card empty"><div class="big">${f==="done"?"🎯":"🎉"}</div><p>${f==="done"?"Nothing finished yet. You've got this!":total?"Nothing left to do here. Great work!":"No tasks yet. Add your first one above."}</p></div>`;
+  }else{
+    const x=secOf(pl.sec),l=show(pl.sec);
+    h+=`<div class="card"><h3>${x.icon} ${escapeHTML(x.name)}</h3>${l.length?l.map(taskRow).join(""):`<p class="small">Nothing here yet. Add a task above and pick this section.</p>`}</div>`;
+    if(isCustom(pl.sec))h+=`<button class="btn danger" onclick="delSection('${pl.sec}')">Delete this section</button> `;
+  }
+  if(tasks.some(t=>t.done))h+=`<button class="btn secondary" onclick="clearDone()">Clear finished tasks</button>`;
+  return h;
+}
+
+
+/* ===== FLASHCARDS ===== */
+let fc={sub:"all",i:0,flip:false};
+function deckAll(){return state.cards.filter(c=>fc.sub==="all"||c.sub===fc.sub)}
+function deckTodo(){return deckAll().filter(c=>!c.k)}
+function addCard(){
+  const f=document.getElementById("fcF").value.trim(),b=document.getElementById("fcB").value.trim();
+  if(!f||!b)return toast("Fill in both the front and the back.");
+  state.cards.push({id:uid(),sub:document.getElementById("fcS").value,f:f.slice(0,200),b:b.slice(0,400),k:false});
+  persist();toast("Card added.");render();
+}
+function flipCard(){fc.flip=!fc.flip;render()}
+function cardGot(){const d=deckTodo();if(!d.length)return;d[fc.i%d.length].k=true;fc.flip=false;persist();render()}
+function cardAgain(){fc.i++;fc.flip=false;render()}
+function delCard(id){state.cards=state.cards.filter(c=>c.id!==id);persist();render()}
+function resetCards(){state.cards.forEach(c=>{if(fc.sub==="all"||c.sub===fc.sub)c.k=false});fc.i=0;fc.flip=false;persist();render()}
+function cardsHTML(){
+  const subs=SUBJECTS.filter(x=>state.cards.some(c=>c.sub===x.id));
+  const all=deckAll(),todo=deckTodo(),c=todo.length?todo[fc.i%todo.length]:null;
+  let h=`<div class="chips"><button class="chip ${fc.sub==="all"?"on":""}" onclick="fc.sub='all';fc.i=0;fc.flip=false;render()">All <b>${state.cards.length}</b></button>${subs.map(x=>`<button class="chip ${fc.sub===x.id?"on":""}" onclick="fc.sub='${x.id}';fc.i=0;fc.flip=false;render()">${x.icon} ${x.name}</button>`).join("")}</div>`;
+  if(!all.length){
+    h+=`<div class="card empty"><div class="big">🗂️</div><p>No flashcards yet. Make one below, or tap "Save as flashcard" after a quiz question.</p></div>`;
+  }else if(!c){
+    h+=`<div class="card empty"><div class="big">🎉</div><p>You've learned all ${all.length} card${all.length===1?"":"s"} here!</p><button class="btn" onclick="resetCards()">Start again</button></div>`;
+  }else{
+    const sub=SUBJECTS.find(x=>x.id===c.sub);
+    h+=`<div class="card"><div class="small">${sub?sub.icon+" "+sub.name+" · ":""}${todo.length} left to learn</div>
+    <button class="flash ${fc.flip?"back":""}" onclick="flipCard()" aria-label="Flip card"><small>${fc.flip?"Answer":"Question"} · tap to flip</small><div>${escapeHTML(fc.flip?c.b:c.f)}</div></button>
+    <div class="row" style="margin-top:14px"><button class="btn secondary" onclick="cardAgain()">Still learning</button><button class="btn" onclick="cardGot()">Got it ✓</button></div></div>`;
+  }
+  h+=`<div class="card"><h3>Make a flashcard</h3>
+   <div class="field"><label for="fcS">Subject</label><select id="fcS">${SUBJECTS.map(x=>`<option value="${x.id}" ${x.id===fc.sub?"selected":""}>${x.icon} ${x.name}</option>`).join("")}</select></div>
+   <div class="field"><label for="fcF">Front (question or term)</label><textarea id="fcF" rows="2" maxlength="200" placeholder="e.g. What does a mitochondrion do?"></textarea></div>
+   <div class="field"><label for="fcB">Back (answer)</label><textarea id="fcB" rows="3" maxlength="400" placeholder="e.g. Releases energy from glucose"></textarea></div>
+   <button class="btn" onclick="addCard()">Add card</button></div>`;
+  if(all.length)h+=`<div class="card"><h3>Your cards</h3>${all.map(x=>`<div class="task ${x.k?"done":""}"><div class="tmain"><div class="ttl">${escapeHTML(x.f)}</div><div class="tmeta"><span>${escapeHTML(x.b.slice(0,80))}${x.b.length>80?"…":""}</span>${x.k?"<span>✓ Learned</span>":""}</div></div><button class="x" aria-label="Delete card" onclick="delCard('${x.id}')">✕</button></div>`).join("")}</div>`;
+  return h;
+}
+
+/* ===== LEADERBOARD ===== */
+function lsNum(k){try{return Number(localStorage.getItem(k)||0)||0}catch(e){return 0}}
+function lbData(){
+  const users=getUsers();
+  return Object.keys(users).map(k=>{
+    const mine=k===currentUser,pre="gradeo_u_"+k+"_";
+    return{k:k,u:users[k],mine:mine,xp:mine?state.xp:lsNum(pre+"gradeo_xp"),quizzes:mine?state.quizzes:lsNum(pre+"gradeo_quizzes")};
+  }).sort((a,b)=>b.xp-a.xp||String(a.u.name).localeCompare(String(b.u.name)));
+}
+function leaderboardHTML(){
+  const rows=lbData(),medal=["🥇","🥈","🥉"];
+  let h=`<div class="card"><h3>Leaderboard</h3><p class="small">Ranked by XP. It shows everyone with an account on this device.</p>`;
+  h+=rows.slice(0,20).map((r,i)=>`<div class="lbrow ${r.mine?"me":""}"><div class="rank">${medal[i]||i+1}</div>${avSpan(r.u,"avs")}<div class="tmain"><div class="ttl">${escapeHTML(r.u.name||r.k)}${r.mine?" (you)":""}</div><div class="small">Level ${Math.floor(r.xp/100)+1} · ${r.quizzes} quiz${r.quizzes===1?"":"zes"}</div></div><div class="lbxp">${r.xp} XP</div></div>`).join("");
+  h+=`</div>`;
+  if(rows.length<2)h+=`<div class="card"><p>You're the only one here so far. Anyone who makes an account on this device will appear on the board, so you can compete with friends or family.</p></div>`;
+  return h;
+}
+
+/* ===== PROFILE PICTURES (animals + colours) ===== */
+const ANIMALS=["🐶","🐱","🦊","🐼","🦁","🐸","🐵","🦄","🐙","🦉","🐧","🐢","🐰","🐯","🐨","🦋"];
+const AV_COLOURS=["#ff7a1a","#2b50ff","#17c3a0","#ff5c8a","#ffd23f","#8b5cf6","#ef4444","#38bdf8","#84cc16","#94a3b8"];
+function lum(h){const n=parseInt(h.slice(1),16);return .299*(n>>16)+.587*((n>>8)&255)+.114*(n&255)}
+function avStyle(c){return `background:${c};color:${lum(c)>150?"#0f1b3d":"#fff"}`}
+function avSpan(u,cls){
+  const a=(u&&u.ava&&typeof u.ava==="object")?u.ava:{},c=a.c||"#ff7a1a";
+  return `<span class="${cls||"avs"}" style="${avStyle(c)}">${a.e?a.e:escapeHTML(((u&&u.name)||"?").charAt(0).toUpperCase())}</span>`;
+}
+function setAva(e,c){
+  const users=getUsers(),u=users[currentUser];if(!u)return;
+  const cur=(u.ava&&typeof u.ava==="object")?u.ava:{};
+  u.ava={e:e===null?(cur.e||""):e,c:c===null?(cur.c||"#ff7a1a"):c};
+  setUsers(users);updateAvatars();render();
+}
+function avatarPicker(){
+  const u=me(),cur=(u.ava&&typeof u.ava==="object")?u.ava:{};
+  return `<div class="card"><h3>Profile picture</h3>
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">${avSpan(u,"avs big")}<div class="small">Pick an animal and a colour. It shows next to your name on the leaderboard.</div></div>
+  <p class="small" style="margin:0 0 6px"><b>Animal</b></p>
+  <div class="avgrid">${ANIMALS.map(e=>`<button class="avopt ${cur.e===e?"on":""}" aria-label="Animal ${e}" onclick="setAva('${e}',null)">${e}</button>`).join("")}<button class="avopt txt ${!cur.e?"on":""}" aria-label="Use my first letter" onclick="setAva('',null)">Aa</button></div>
+  <p class="small" style="margin:14px 0 6px"><b>Colour</b></p>
+  <div class="avgrid">${AV_COLOURS.map(c=>`<button class="swatch ${(cur.c||"#ff7a1a")===c?"on":""}" style="background:${c}" aria-label="Colour ${c}" onclick="setAva(null,'${c}')"></button>`).join("")}</div></div>`;
+}
+
+/* ===== GENERATED QUESTIONS, TEST PATH, DIFFICULTY ===== */
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick1=a=>a[ri(0,a.length-1)];
+function numQ(t,q,ans,e,fmt){
+  const f=fmt||String;
+  const c=[...new Set([ans+1,ans-1,ans+2,ans-2,ans+10,ans-10,ans*2,ans+5])].filter(x=>x!==ans&&x>=0).sort(()=>Math.random()-.5).slice(0,3);
+  return Q(t,q,[ans].concat(c).map(f),0,e);
+}
+const GBP=x=>"£"+x;
+const GEN={
+maths:L=>{const k=ri(0,4);
+ if(k===0){const p=pick1([10,20,25,50,5,15,30,40,60,75].slice(0,3+L)),n=ri(2,10+L*4)*20,a=p*n/100;return numQ("Ratio & proportion","What is "+p+"% of "+n+"?",a,p+"% of "+n+" = "+p+" ÷ 100 × "+n+" = "+a+".")}
+ if(k===1){const x=ri(2,5+L*2),a=ri(2,3+L),b=ri(1,10+L*3);return numQ("Algebra","Solve: "+a+"x + "+b+" = "+(a*x+b),x,"Subtract "+b+" to get "+a+"x = "+a*x+", then divide by "+a+", so x = "+x+".")}
+ if(k===2){if(L>5){const b=ri(2,10+L)*2,h=ri(2,12);return numQ("Geometry","What is the area of a triangle with base "+b+" cm and height "+h+" cm?",b*h/2,"Area of a triangle = ½ × base × height = ½ × "+b+" × "+h+" = "+b*h/2+" cm².",x=>x+" cm²")}
+  const w=ri(2,6+L),h=ri(2,9);return numQ("Geometry","What is the area of a rectangle "+w+" cm by "+h+" cm?",w*h,"Area = length × width = "+w+" × "+h+" = "+w*h+" cm².",x=>x+" cm²")}
+ if(k===3){const m=ri(3,10+L*3),a=ri(1,m),b=ri(1,m),c=ri(1,m),d=4*m-a-b-c;if(d<1)return GEN.maths(L);return numQ("Statistics","What is the mean of "+[a,b,c,d].join(", ")+"?",m,"Add the values to get "+4*m+", then divide by 4, so the mean is "+m+".")}
+ const a=ri(1,4),b=ri(a+1,6),kk=ri(2,5+L);return numQ("Ratio & proportion","Share "+(a+b)*kk+" in the ratio "+a+" : "+b+". What is the larger share?",b*kk,a+" + "+b+" = "+(a+b)+" parts, so one part is "+kk+". The larger share is "+b+" × "+kk+" = "+b*kk+".")},
+computing:L=>{const bits=Math.min(8,3+Math.ceil(L/2)),n=ri(2,2**bits-1),bin=n.toString(2);
+ if(Math.random()<.5)return numQ("Data representation","What is the binary number "+bin+" in decimal?",n,"Add the place values (1, 2, 4, 8, 16…) wherever there is a 1. "+bin+" = "+n+".");
+ const w=[...new Set([n^1,n^2,n^4,n+1,n-1].filter(x=>x>0&&x!==n))].slice(0,3).map(x=>x.toString(2));
+ return Q("Data representation","Convert "+n+" to binary.",[bin].concat(w),0,"Work down the place values (128, 64, 32, 16, 8, 4, 2, 1). "+n+" in binary is "+bin+".")},
+physics:L=>{const k=ri(0,2);
+ if(k===0){const sp=ri(2,8+L*2),t=ri(2,10);return numQ("Forces","A car travels "+sp*t+" m in "+t+" s. What is its speed in m/s?",sp,"Speed = distance ÷ time = "+sp*t+" ÷ "+t+" = "+sp+" m/s.")}
+ if(k===1){const i=ri(1,5+L),r=ri(2,10+L);return numQ("Electricity","A circuit has a current of "+i+" A and a resistance of "+r+" Ω. What is the voltage in V?",i*r,"V = I × R = "+i+" × "+r+" = "+i*r+" V.")}
+ const m=ri(2,10+L),a=ri(2,8);return numQ("Forces","A "+m+" kg mass accelerates at "+a+" m/s². What is the force in N?",m*a,"Force = mass × acceleration = "+m+" × "+a+" = "+m*a+" N.")},
+business:L=>{const k=ri(0,2);
+ if(k===0){const r=ri(5,40+L*10)*50,c=ri(1,r/50-1)*50;return numQ("Finance","Revenue is £"+r+" and costs are £"+c+". What is the profit?",r-c,"Profit = revenue − costs = £"+r+" − £"+c+" = £"+(r-c)+".",GBP)}
+ if(k===1){const q=ri(5,50+L*10),p=ri(2,20);return numQ("Finance","A business sells "+q+" items at £"+p+" each. What is the revenue?",q*p,"Revenue = price × quantity = £"+p+" × "+q+" = £"+q*p+".",GBP)}
+ const u=ri(2,8),kk=ri(5,30+L*5),v=ri(2,10),p=v+u;return numQ("Finance","Fixed costs are £"+u*kk+". Each item sells for £"+p+" and costs £"+v+" to make. How many items to break even?",kk,"Each item adds £"+u+" towards fixed costs. £"+u*kk+" ÷ £"+u+" = "+kk+" items.")}
+};
+const PAIRS={
+french:{t:"Vocabulary",f:a=>"What does '"+a+"' mean in English?",p:[["chien","Dog"],["maison","House"],["livre","Book"],["eau","Water"],["pain","Bread"],["école","School"],["rouge","Red"],["bleu","Blue"],["merci","Thank you"],["fromage","Cheese"],["voiture","Car"],["soleil","Sun"]]},
+spanish:{t:"Vocabulary",f:a=>"What does '"+a+"' mean in English?",p:[["casa","House"],["libro","Book"],["agua","Water"],["pan","Bread"],["escuela","School"],["rojo","Red"],["azul","Blue"],["queso","Cheese"],["coche","Car"],["sol","Sun"],["gato","Cat"],["amigo","Friend"]]},
+geography:{t:"Urban issues",f:a=>"What is the capital of "+a+"?",p:[["France","Paris"],["Spain","Madrid"],["Italy","Rome"],["Germany","Berlin"],["Japan","Tokyo"],["Egypt","Cairo"],["Canada","Ottawa"],["Australia","Canberra"],["Brazil","Brasília"],["India","New Delhi"],["Kenya","Nairobi"],["Poland","Warsaw"]]},
+history:{t:"Norman England",f:a=>"When was "+a+"?",p:[["the Great Fire of London","1666"],["the Battle of Hastings","1066"],["the Magna Carta sealed","1215"],["the Spanish Armada defeated","1588"],["the Gunpowder Plot","1605"],["the Battle of Bosworth","1485"],["the start of the First World War","1914"],["the end of the Second World War","1945"],["the Berlin Wall built","1961"],["the Wall Street Crash","1929"]]},
+chemistry:{t:"Periodic table",f:a=>"What is the chemical symbol for "+a+"?",p:[["hydrogen","H"],["helium","He"],["carbon","C"],["oxygen","O"],["potassium","K"],["iron","Fe"],["copper","Cu"],["gold","Au"],["calcium","Ca"],["chlorine","Cl"],["magnesium","Mg"],["lead","Pb"]]},
+english:{t:"Language Paper 1",f:a=>"Which term means "+a+"?",p:[["a comparison using 'like' or 'as'","Simile"],["saying one thing IS another","Metaphor"],["giving objects human qualities","Personification"],["a word that sounds like its meaning","Onomatopoeia"],["repeated starting sounds","Alliteration"],["deliberate exaggeration","Hyperbole"],["saying the opposite of what you mean","Irony"],["a 14-line poem","Sonnet"]]},
+biology:{t:"Cells",f:a=>"Which part of a cell "+a+"?",p:[["holds the DNA","Nucleus"],["releases energy in respiration","Mitochondria"],["makes proteins","Ribosome"],["controls what enters and leaves","Cell membrane"],["carries out photosynthesis","Chloroplast"],["strengthens a plant cell","Cell wall"]]},
+rs:{t:"Beliefs and teachings",f:a=>"Which religion's holy text is "+a+"?",p:[["the Torah","Judaism"],["the Qur'an","Islam"],["the Bible","Christianity"],["the Guru Granth Sahib","Sikhism"],["the Vedas","Hinduism"],["the Tripitaka","Buddhism"]]},
+pe:{t:"Anatomy & physiology",f:a=>"Where are the "+a+"?",p:[["quadriceps","Front of the thigh"],["hamstrings","Back of the thigh"],["biceps","Front of the upper arm"],["triceps","Back of the upper arm"],["calf muscles","Back of the lower leg"],["deltoids","Shoulders"]]},
+art:{t:"Colour theory",f:a=>"What colour do you get by mixing "+a+"?",p:[["red and yellow","Orange"],["blue and yellow","Green"],["red and blue","Purple"],["red and white","Pink"],["black and white","Grey"],["blue and white","Light blue"]]}
+};
+function pairQs(sub){
+  const d=PAIRS[sub.id];if(!d)return[];
+  return d.p.map(x=>{const w=d.p.map(y=>y[1]).filter(b=>b!==x[1]).sort(()=>Math.random()-.5).slice(0,3);return Q(d.t,d.f(x[0]),[x[1]].concat(w),0,x[0].charAt(0).toUpperCase()+x[0].slice(1)+" → "+x[1]+".")});
+}
+function buildTest(sub,target,topic){
+  const seen=new Set(),out=[];
+  const add=q=>{if(q&&!seen.has(q.q)&&(!topic||q.t===topic)){seen.add(q.q);out.push(prep(q,sub))}};
+  sub.qs.concat(pairQs(sub)).sort(()=>Math.random()-.5).forEach(q=>{if(out.length<target)add(q)});
+  const g=GEN[sub.id];let tries=0;
+  while(g&&out.length<target&&tries++<400)add(g(PATHL));
+  return out;
+}
+let PATHL=3;
+const PASS=n=>45+Math.round(40*(n-1)/999),lenOf=n=>10+Math.round(20*(n-1)/999),levelOf=n=>Math.ceil(n/100),hardOf=n=>Math.round(1+19*(n-1)/999);
+function pathOf(id){state.path=state.path||{};return state.path[id]||(state.path[id]={done:0,best:{}})}
+let pathLv=0;
+function startPath(id){
+  const sub=SUBJECTS.find(x=>x.id===id);if(!sub)return;
+  const P=pathOf(id),n=P.done+1;
+  if(n>1000)return toast("You've passed all 1000 tests in this subject. Amazing!");
+  PATHL=hardOf(n);const L=levelOf(n);
+  quiz=newQuiz(buildTest(sub,lenOf(n)),{id:sub.id,name:sub.name+" · Test "+n+" (Level "+L+")"},{kind:"path",id:id,n:n,L:L,pass:PASS(n)},lenOf(n));
+  go("quiz");
+}
+function finishPath(){
+  const a=quiz.again,P=pathOf(a.id),pct=Math.round(quiz.score/quiz.qs.length*100);
+  quiz.pct=pct;quiz.passed=pct>=a.pass;
+  if(quiz.passed){P.best[a.n]=Math.max(P.best[a.n]||0,pct);P.done++;quiz.round=a.n===1000;persist()}
+}
+function pathMsg(){
+  const a=quiz.again;if(!a||a.kind!=="path")return"";
+  if(!quiz.passed)return `<p><b>❌ ${quiz.pct}%. You need ${a.pass}% to pass this test. Have another go!</b></p>`;
+  if(quiz.round)return `<p><b>🏆 You passed all 1000 tests in this subject!</b></p>`;
+  return `<p><b>✅ Test ${a.n} passed with ${quiz.pct}%.${levelOf(a.n+1)>a.L?" ⬆️ Level "+levelOf(a.n+1)+" unlocked!":""}</b></p>`;
+}
+function pathHTML(sub){
+  const P=pathOf(sub.id),next=Math.min(P.done+1,1000),cur=levelOf(next),open=pathLv||cur;
+  let h=`<div class="card"><h2>${sub.icon} ${sub.name} test path</h2><p class="small">${P.done} of 1000 tests passed. Pass each test to unlock the next. Every test is a little harder than the last, and Level 10 is the hardest. There is no waiting between tests.</p><div class="bar"><i style="width:${P.done/10}%"></i></div>
+  <p style="margin-bottom:0">${P.done>=1000?"<b>🏆 All 1000 tests passed!</b>":`<button class="btn" onclick="startPath('${sub.id}')">Start test ${next} (Level ${cur})</button>`}</p></div>${diffHTML()}`;
+  for(let L=1;L<=10;L++){
+    const lo=(L-1)*100,dn=Math.max(0,Math.min(100,P.done-lo));
+    h+=`<div class="card ${L===cur?"cur":""}"><h3 style="cursor:pointer" onclick="pathLv=${L===open?0:L};render()">Level ${L}${L===10?" 🏆 hardest":""} <span class="small">· ${dn}/100 done</span></h3>`;
+    if(L===open){
+      let b="";
+      for(let n=lo+1;n<=lo+100;n++){const st=n<=P.done?"done":n===P.done+1?"next":"lock";
+        b+=`<button class="tbtn ${st}" ${st==="next"?`onclick="startPath('${sub.id}')"`:"disabled"}>${st==="done"?"✓":st==="lock"?"🔒":"▶"} ${n}${st==="done"&&P.best[n]!==undefined?`<small>${P.best[n]}%</small>`:""}</button>`}
+      h+=`<p class="small">Tests ${lo+1} to ${lo+100} · ${lenOf(lo+1)} to ${lenOf(lo+100)} questions · pass mark ${PASS(lo+1)}% to ${PASS(lo+100)}%</p><div class="tgrid">${b}</div>`;
+    }
+    h+=`</div>`;
+  }
+  return h;
+}
+function easyQ(q){
+  const w=q.o.map((_,i)=>i).filter(i=>i!==q.a).sort(()=>Math.random()-.5)[0],keep=[q.a,w].sort(()=>Math.random()-.5);
+  return Object.assign({},q,{o:keep.map(i=>q.o[i]),a:keep.indexOf(q.a)});
+}
+function diffWrap(q){return(state.diff==="easy")?easyQ(q):q}
+function setDiff(d){state.diff=d;persist();render()}
+function diffHTML(){
+  const d=state.diff||"normal",o=[["easy","Easy","2 choices · 5 XP each"],["normal","Normal","4 choices · 10 XP each"],["hard","Hard","20 seconds a question · 15 XP each"]];
+  return `<div class="card"><h3>Difficulty (you choose)</h3><div class="chips" style="margin-bottom:6px">${o.map(x=>`<button class="chip ${d===x[0]?"on":""}" onclick="setDiff('${x[0]}')">${x[1]}</button>`).join("")}</div><p class="small" style="margin:0">${o.find(x=>x[0]===d)[2]}. This is separate from the 10 levels.</p></div>`;
+}
+let qt=null;
+function startQT(){
+  if(!quiz||!quiz.hard||quiz.picked!==null||quiz.i>=quiz.qs.length)return clearInterval(qt);
+  if(quiz.armed===quiz.i)return;
+  clearInterval(qt);quiz.armed=quiz.i;quiz.tl=20;
+  qt=setInterval(()=>{
+    if(view!=="quiz"||!quiz||quiz.picked!==null){clearInterval(qt);return}
+    quiz.tl--;const e=document.getElementById("qt");if(e)e.textContent=quiz.tl;
+    if(quiz.tl<=0){clearInterval(qt);toast("Time's up!");pick(-1)}
+  },1000);
+}
+function timerSpan(){return(quiz&&quiz.hard&&quiz.picked===null)?`<span class="small" style="float:right">⏱ <b id="qt">${quiz.tl||20}</b>s</span>`:""}
+
+const KW={"maths": "algebra,equation,fraction,decimal,percent,ratio,proportion,geometry,angle,area,volume,shape,probability,statistic,mean,median,graph,number,trigonometry,sine,cosine,pythagoras,indices,surd,sequence,function,circle,triangle,vector,transform,symmetry,perimeter,factor,prime,multiple,expand,simplify,inequalit,simultaneous,quadratic,standard form,bounds,interest,speed,rounding,estimat,measure,construct,loci,bearing,scale,data,chart", "english": "poem,poetry,novel,shakespeare,macbeth,romeo,hamlet,language,essay,writing,grammar,spelling,punctuation,vocabulary,speech,persuasive,narrative,character,theme,plot,dickens,carol,jekyll,inspector,sentence,paragraph,simile,metaphor,analysis,context,quote,literature,reading,comprehension,drama,play,creative,structure,tone,imagery,technique,article,letter,description,story", "biology": "cell,organ,enzyme,dna,gene,inherit,evolution,photosynthesis,respiration,infection,disease,immun,vaccin,heart,blood,digest,nervous,hormone,ecosystem,ecology,plant,animal,bacteria,virus,mitosis,meiosis,diffusion,osmosis,transport,reproduc,homeostasis,biodiversity,food chain,adaptation,classification,kidney,lung,brain,antibiotic,microscop,protein,cancer,variation,selection,carbon cycle,pathogen", "chemistry": "atom,element,compound,bond,ionic,covalent,metal,acid,alkali,salt,reaction,rate,catalyst,organic,alkane,alkene,polymer,periodic,group,electro,mole,mass,equation,gas,air,water,energy,crude,fraction,distillation,titration,electron,proton,neutron,isotope,oxid,reduc,carbon,atmosphere,resource,analysis,chromatograph,halogen,alloy,ph scale,yield,bonding,structure", "physics": "force,motion,speed,velocity,acceleration,energy,power,work,electric,circuit,current,voltage,resistance,wave,sound,light,radiation,nuclear,atom,particle,magnet,space,star,planet,gravity,momentum,pressure,density,heat,thermal,temperature,lens,reflection,refraction,decay,half-life,ohm,charge,newton,spring,mains,generator,transformer,fusion,fission,orbit,universe", "history": "war,empire,king,queen,revolution,medicine,health,tudor,elizabeth,henry,norman,viking,cold war,nazi,germany,weimar,british,america,civil rights,industrial,victorian,roman,medieval,crusade,reformation,migration,treaty,battle,monarch,parliament,source,historian,suffrage,russia,soviet,vietnam,korea,cuba,berlin,plague,crime,punishment,castle,conquest,anglo,saxon,hitler,churchill,holocaust,trench,peasant,tudors,stuart", "geography": "river,coast,weather,climate,ecosystem,rainforest,desert,urban,city,rural,population,migration,hazard,earthquake,volcano,flood,tectonic,glacier,erosion,deposition,map,fieldwork,development,economy,resource,energy,water,food,sustain,tourism,globalisation,biome,tundra,pollution,settlement,transport,continent,country,plate,storm,drought,landform,tropical,megacity,slum,deforestation", "computing": "algorithm,program,code,python,data,binary,hexadecimal,network,security,cyber,hardware,software,memory,cpu,storage,database,sql,logic,boolean,loop,variable,function,array,string,sorting,search,encryption,internet,web,protocol,compression,ethics,legal,operating,flowchart,pseudocode,debug,validation,input,output,computer,processor,cloud,wireless,malware,phishing,abstraction", "business": "enterprise,entrepreneur,marketing,finance,profit,revenue,cost,cash,break-even,operations,production,human resource,recruit,training,customer,competition,market,research,pricing,price,promotion,product,place,budget,loan,stakeholder,ethic,globalisation,quality,supply,ownership,sole trader,partnership,limited,franchise,business plan,motivation,communication,stock,sales,employ,wage,tax,economy,interest rate", "rs": "belief,teaching,religion,christian,islam,muslim,jew,judaism,hindu,sikh,buddh,god,worship,prayer,festival,pilgrim,ethic,moral,philosoph,life,death,afterlife,marriage,family,relationship,peace,war,justice,crime,punishment,human rights,environment,creation,evil,suffering,scripture,bible,quran,torah,miracle,atheis,humanis,equality,gender,sacred,ritual,church,mosque,temple,synagogue", "pe": "muscle,bone,joint,skeleton,heart,lung,fitness,training,exercise,health,diet,nutrition,skill,sport,psychology,motivation,anxiety,arousal,injury,warm,cool,flexibility,strength,endurance,speed,agility,power,coordination,balance,tactics,performance,wellbeing,sleep,stamina,circulat,respir,lever,movement,technique,aerobic,anaerobic,fitt,goal,team,game,athlet,posture", "art": "draw,paint,colour,color,tone,shade,texture,line,shape,form,pattern,print,sculpt,clay,collage,photograph,design,sketch,portfolio,artist,movement,impressionis,cubism,surreal,pop art,perspective,composition,watercolour,acrylic,oil,charcoal,pencil,pastel,digital,textile,ceramic,gallery,analysis,evaluation,mixed media,portrait,landscape,still life,printmaking"};
+KW.french=KW.spanish="vocab,verb,tense,grammar,family,school,food,travel,holiday,town,house,hobb,sport,music,job,work,future,past,present,speaking,listening,reading,writing,translat,number,colour,clothes,weather,health,routine,environment,technology,pronunciation,adjective,noun,gender,question,shopping,restaurant,culture,festival,friend,free time";
+const BAD=["fuck","shit","bitch","porn","nude","sexy","cunt","dick","slut","nigg","fag","rape","suicide","kill yourself"];
+function ctOf(sid){state.ctopics=state.ctopics||{};return state.ctopics[sid]||(state.ctopics[sid]=[])}
+function addTopic(sid){
+  const inp=document.getElementById("ctI"),sub=SUBJECTS.find(x=>x.id===sid);if(!inp||!sub)return;
+  const t=inp.value.trim().replace(/\s+/g," "),l=t.toLowerCase();
+  if(t.length<3||t.length>40)return toast("Topic names need 3 to 40 characters.");
+  if(!/^[\p{L}\p{N} &'\-,.()]+$/u.test(t))return toast("Please use letters and numbers only.");
+  if(BAD.some(w=>l.includes(w)))return toast("That isn't an appropriate topic.");
+  const kws=(KW[sid]||"").split(",").concat(sub.topics.join(" ").toLowerCase().split(/[^a-z]+/).filter(w=>w.length>4));
+  if(!kws.some(w=>w&&l.includes(w)))return toast("That doesn't look like a "+sub.name+" topic. Try something like '"+sub.topics[0]+"' or '"+sub.topics[1]+"'.");
+  const list=ctOf(sid);
+  if(list.concat(sub.topics).some(x=>x.toLowerCase()===l))return toast("That topic is already there.");
+  if(list.length>=12)return toast("You can add up to 12 topics per subject.");
+  list.push(t);persist();render();
+}
+function delTopic(sid,i){ctOf(sid).splice(i,1);persist();render()}
+function myTopicsHTML(sub){
+  const l=ctOf(sub.id);
+  return `<h3 style="margin-top:18px">Your own topics</h3><p class="small">Add extra topics for ${sub.name}. Only suitable ${sub.name} topics are accepted, and each one gets video and Google help links.</p>
+  ${l.map((t,i)=>`<div class="help"><div><b>${escapeHTML(t)}</b><div class="small">your topic</div></div><div class="lnks">${helpLinks(sub.name,t)}<button class="lnk" onclick="delTopic('${sub.id}',${i})">Remove</button></div></div>`).join("")}
+  <div class="field" style="margin-top:12px"><label for="ctI">Add a topic</label><input id="ctI" maxlength="40" placeholder="e.g. ${escapeHTML(sub.topics[0])}" onkeydown="if(event.key==='Enter')addTopic('${sub.id}')"></div><button class="btn secondary" onclick="addTopic('${sub.id}')">Add topic</button>`;
+}
+
+/* ===== FOR YOU (personal plan) ===== */
+function planFor(d){
+  if(d>=14)return["Build your understanding",["Do 3 short sessions a week instead of one long one","Make flashcards for key terms and review them","Work through your Test path a little each session"]];
+  if(d>=4)return["Practise and fix gaps",["Quiz yourself instead of re-reading notes","Run 'Fix my mistakes' every day","Spend most of your time on your weak topics below"]];
+  if(d>=1)return["Final recap",["Do a Mixed challenge to stay sharp","Go through your flashcards one more time","Stop early the night before and get good sleep"]];
+  return["Test day",["Skim your flashcards lightly, no new topics","Eat, drink water and arrive early","Read each question twice before answering"]];
+}
+function forYouHTML(){
+  const tests=state.tasks.filter(t=>t.sec==="tests"&&!t.done&&t.due&&daysUntil(t.due)!==null&&daysUntil(t.due)>=0).sort(sortTasks).slice(0,3);
+  let h="";
+  if(!tests.length)h+=`<div class="card"><h3>No test coming up</h3><p>Add a test in the Planner (choose the <b>Tests & exams</b> section, a subject and a date) and I'll build a plan with lessons, links and how long to study each day.</p><button class="btn" onclick="go('planner')">Open planner</button></div>`;
+  tests.forEach(t=>{
+    const d=daysUntil(t.due),sub=SUBJECTS.find(x=>x.id===t.subject),pl=planFor(d);
+    const weak=sub?weakTopics().filter(x=>x.s.id===sub.id):[];
+    const mins=Math.min(90,20+weak.length*8+(d<=7?15:0)+(d===0?-20:0));
+    const learn=sub?ctOf(sub.id).concat(sub.topics).filter(tp=>!weak.some(w=>w.t===tp)).slice(0,5):[];
+    h+=`<div class="card struggle"><h3>${sub?sub.icon+" ":""}${escapeHTML(t.title)}</h3><p class="small">${d===0?"Today":d===1?"Tomorrow":"In "+d+" days"} · ${pl[0]} · about <b>${mins} minutes a day</b></p>
+    <p><b>What to do</b></p>${pl[1].map(x=>`<div class="tip">${x}</div>`).join("")}
+    ${weak.length?`<p><b>Your weak topics</b></p>${weak.slice(0,4).map(w=>helpRow(w.s.name,w.t,w.w+" missed")).join("")}`:""}
+    ${sub&&learn.length?`<p><b>${weak.length?"Also cover":"Lessons to cover"}</b></p>${learn.map(tp=>helpRow(sub.name,tp,"lesson")).join("")}`:""}
+    ${sub?`<div class="row" style="margin-top:12px"><button class="btn" onclick="startQuiz('${sub.id}')">Quiz me</button><button class="btn secondary" onclick="go('tests','${sub.id}')">Test path</button><button class="btn secondary" onclick="go('cards')">Flashcards</button></div>`:`<p class="small">Pick a subject on this task in the Planner to get topic lessons and links.</p>`}</div>`;
+  });
+  const wk=weakTopics().slice(0,3);
+  if(wk.length)h+=struggleCard(wk.map(x=>helpRow(x.s.name,x.t,x.w+" missed")),"Based on your quizzes","These are the topics to work on next.");
+  return h;
+}
+
+/* ===== PIP THE OWL (small mascot) ===== */
+const PIP_TIPS=["Short sessions with breaks beat one long cram.","Quiz yourself instead of re-reading. It sticks better.","Sleep helps your brain keep what you learned.","Stuck? Break the question into smaller steps.","Mistakes are useful. That's what 'Fix my mistakes' is for.","Drink some water. Your brain likes it.","Start with the topic you like least, while you're fresh."];
+let pipT=null;
+function pipOn(){return store("gradeo_pip","1")!=="0"}
+function updatePip(){
+  const b=document.getElementById("pip");if(!b)return;
+  b.classList.toggle("hidden",!pipOn()||!currentUser);
+  if(!pipOn()){const x=document.getElementById("pipb");if(x)x.classList.add("hidden")}
+}
+function pipTap(){
+  const x=document.getElementById("pipb");if(!x)return;
+  if(!x.classList.contains("hidden")){x.classList.add("hidden");return}
+  const w=weakTopics();
+  x.textContent="Pip: "+(w.length&&Math.random()<.5?"want to take another look at "+w[0].t+"?":pick1(PIP_TIPS));
+  x.classList.remove("hidden");clearTimeout(pipT);pipT=setTimeout(()=>x.classList.add("hidden"),6000);
+}
+function togglePip(){save("gradeo_pip",pipOn()?"0":"1");updatePip();render()}
+function pipCard(){return `<div class="card"><h3>Pip the owl 🦉</h3><p class="small">Pip is a small helper in the corner. Tap him for a tip. He never pops up on his own.</p><button class="btn secondary" onclick="togglePip()">${pipOn()?"Hide Pip":"Show Pip"}</button></div>`}
+
+/* ===== TIMER PRESETS ===== */
+const TIMERS=[["Pomodoro",25,1],["Quick focus",15,1],["Deep focus",50,1],["Short break",5,0],["Long break",15,0],["Custom",0,1]];
+let timerLen=25*60,timerLbl="Pomodoro",timerXP=1;
+function setTimer(i){
+  if(timerRunning)return toast("Pause the timer before changing it.");
+  const t=TIMERS[i];let m=t[1];
+  if(!m){m=Math.round(Number(prompt("How many minutes? (1 to 180)","30")));if(!(m>=1&&m<=180))return toast("Pick a number from 1 to 180.")}
+  timerLen=m*60;timerSeconds=timerLen;timerLbl=t[0]==="Custom"?m+" minute timer":t[0];timerXP=t[2]?m:0;render();
+}
+
+/* ===== VIEWS ===== */
+const TITLES={home:"Home",subjects:"Subjects",subject:"Subject",quiz:"Quiz",tests:"Test path",foryou:"For You",cards:"Flashcards",leaderboard:"Leaderboard",advice:"Study Advice",timer:"Study Timer",methods:"Study Methods",planner:"Planner",awards:"Awards",settings:"Settings"};
+function go(v,a){view=v;arg=a||null;render()}
+function subjectCard(s){return `<div class="subject" style="--c:${s.c}" tabindex="0" role="button" onclick="go('subject','${s.id}')" onkeydown="if(event.key==='Enter')go('subject','${s.id}')"><div class="ico">${s.icon}</div><h3>${s.name}</h3><div class="small">${s.topics.length} topics · ${s.qs.length} quiz questions</div></div>`}
+
+function render(){
+  document.getElementById("pageTitle").textContent=TITLES[view]||"Home";
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.v===(view==="subject"?"subjects":view)));
+  const c=document.getElementById("content");let h="";
+  if(view==="home"){
+    const tip=ADVICE[new Date().getDate()%ADVICE.length];
+    h=`<div class="hero"><h1>Hi ${escapeHTML(me().name)}, ready to revise?</h1><p>Pick a subject, take a quiz or start a focus session to earn XP.</p><button class="btn" onclick="go('quiz')">Take a quiz</button></div>
+    <div class="grid stats"><div class="card"><div class="stat">${state.xp}</div><div class="small">XP · Level ${level()}</div></div><div class="card"><div class="stat">${state.streak}</div><div class="small">Day streak</div></div><div class="card"><div class="stat">${state.sessions}</div><div class="small">Study sessions</div></div></div>
+    <div class="card"><h3>Today's study advice</h3><b>${tip[0]}</b><p>${tip[1]}</p><button class="btn secondary" onclick="go('advice')">More advice</button></div>`;
+    const up=state.tasks.filter(t=>!t.done&&t.due).sort(sortTasks).slice(0,3);
+    if(up.length)h+=`<div class="card"><h3>Coming up</h3>${up.map(taskRow).join("")}<button class="btn secondary" style="margin-top:12px" onclick="go('planner')">Open planner</button></div>`;
+    const wk=weakTopics().slice(0,4);
+    if(wk.length)h+=struggleCard(wk.map(x=>helpRow(x.s.name,x.t,x.w+" missed")),"Topics you're struggling with","Based on your quiz answers. Tap a link to get help.");
+  }else if(view==="subjects"){
+    h=`<div class="grid">${SUBJECTS.map(subjectCard).join("")}</div>`;
+  }else if(view==="subject"){
+    const sub=SUBJECTS.find(x=>x.id===arg)||SUBJECTS[0];
+    const cnt=t=>sub.qs.filter(q=>q.t===t).length;
+    h=`<div class="card" style="--c:${sub.c}"><div class="ico lg">${sub.icon}</div><h2>${sub.name}</h2>
+    <p class="small">Topics to cover. Tap a topic to test just that one.</p>
+    <div class="chips">${sub.topics.map((t,i)=>cnt(t)?`<button class="chip" onclick="startQuiz('${sub.id}',${i})">${escapeHTML(t)} <b>${cnt(t)}</b></button>`:`<span class="badge">${escapeHTML(t)}</span>`).join("")}</div>
+    ${myTopicsHTML(sub)}<h3 style="margin-top:18px">Advice for ${sub.name}</h3>${sub.advice.map(t=>`<div class="tip">${t}</div>`).join("")}
+    <div class="row" style="margin-top:16px"><button class="btn" onclick="startQuiz('${sub.id}')">Quiz me (15 questions)</button><button class="btn secondary" onclick="go('tests','${sub.id}')">Test path</button><button class="btn secondary" onclick="go('subjects')">Back</button></div></div>`;
+  }else if(view==="quiz"){
+    if(!quiz){
+      const nm=(state.miss||[]).length;
+      h=`<p>Pick a quiz. Quizzes are now 15 to 20 questions, and every question tells you why the answer is right.</p>
+      <div class="grid" style="margin-bottom:20px">
+      <div class="subject" style="--c:#2b50ff" tabindex="0" role="button" onclick="startMixed()" onkeydown="if(event.key==='Enter')startMixed()"><div class="ico">🎲</div><h3>Mixed challenge</h3><div class="small">10 random questions from every subject</div></div>
+      <div class="subject" style="--c:#ef4444" tabindex="0" role="button" onclick="startMistakes()" onkeydown="if(event.key==='Enter')startMistakes()"><div class="ico">🔁</div><h3>Fix my mistakes</h3><div class="small">${nm?nm+" question"+(nm===1?"":"s")+" to try again":"Nothing to retry yet"}</div></div></div>
+      ${diffHTML()}<h3>Test path: 1,000 tests a subject, 10 levels</h3><div class="chips">${SUBJECTS.map(x=>`<button class="chip" onclick="go('tests','${x.id}')">${x.icon} ${x.name} <b>${pathOf(x.id).done}</b></button>`).join("")}</div><h3>Or choose a subject</h3><div class="grid">${SUBJECTS.map(x=>`<div class="subject" style="--c:${x.c}" tabindex="0" role="button" onclick="startQuiz('${x.id}')" onkeydown="if(event.key==='Enter')startQuiz('${x.id}')"><div class="ico">${x.icon}</div><h3>${x.name}</h3><div class="small">${x.qs.length} questions</div></div>`).join("")}</div>`;
+    }else if(quiz.i>=quiz.qs.length){
+      h=`<div class="card"><h2>${quiz.score===quiz.qs.length?"Perfect score! 🎉":"Quiz finished"}</h2><p class="stat">${quiz.score} / ${quiz.qs.length}</p><p>You earned ${quiz.score*(quiz.xpq||10)} XP.</p>${pathMsg()}<div class="row"><button class="btn" onclick="replayQuiz()">${quiz.passed?"Next test":"Try again"}</button><button class="btn secondary" onclick="quiz=null;go('quiz')">Other quizzes</button></div></div>`
+      +(quiz.missed.length?struggleCard(quiz.missed.map(m=>helpRow(m.sn,m.t)),"You're struggling with these topics","Watch a video or read up on each one, then try the quiz again."):"");
+    }else{
+      const q=quiz.qs[quiz.i],ok=quiz.picked===q.a;
+      h=`<div class="card">${timerSpan()}<div class="small">${escapeHTML(quiz.s.name)} · Question ${quiz.i+1} of ${quiz.qs.length}${quiz.s.id==="mixed"||quiz.s.id==="miss"?" · "+escapeHTML(q.sn):""}</div><div class="quiz-question">${escapeHTML(q.q)}</div>
+      ${q.o.map((o,n)=>`<button class="option ${quiz.picked===null?"":n===q.a?"right":n===quiz.picked?"wrong":""}" ${quiz.picked!==null?"disabled":""} onclick="pick(${n})">${escapeHTML(o)}</button>`).join("")}
+      ${quiz.picked!==null?explainHTML(q,ok)+`<button class="btn" style="margin-top:14px" onclick="nextQ()">${quiz.i+1<quiz.qs.length?"Next question":"See results"}</button>`:""}</div>`;
+    }
+  }else if(view==="advice"){
+    h=`<div class="card"><h3>Study advice</h3>${ADVICE.map(a=>`<div class="tip"><b>${a[0]}</b>${a[1]}</div>`).join("")}</div>
+    <h3>Advice by subject</h3><div class="grid">${SUBJECTS.map(s=>`<div class="card" style="--c:${s.c};border-top:8px solid ${s.c}"><div class="ico">${s.icon}</div><h3>${s.name}</h3>${s.advice.map(t=>`<div class="tip">${t}</div>`).join("")}</div>`).join("")}</div>`;
+  }else if(view==="timer"){
+    h=`<div class="card"><div class="chips" style="justify-content:center">${TIMERS.map((t,i)=>`<button class="chip ${(t[0]===timerLbl||(t[0]==="Custom"&&/minute timer/.test(timerLbl)))?"on":""}" onclick="setTimer(${i})">${t[0]}${t[1]?" · "+t[1]+"m":""}</button>`).join("")}</div><p class="small" style="text-align:center;margin:0">${timerLbl}</p><div class="timer" id="tm">${fmt(timerSeconds)}</div><div class="row" style="justify-content:center"><button class="btn" onclick="toggleTimer()">${timerRunning?"Pause":"Start"}</button><button class="btn secondary" onclick="resetTimer()">Reset</button></div><p class="small" style="text-align:center;margin-top:14px">Finish a full focus session to earn 1 XP per minute. Breaks earn no XP. Keep this tab open.</p></div>`;
+  }else if(view==="methods"){
+    h=`<div class="grid">${METHODS.map(m=>`<div class="card"><div class="ico">${m[0]}</div><h3>${m[1]}</h3><p>${m[2]}</p></div>`).join("")}</div>`;
+  }else if(view==="planner"){
+    h=plannerHTML();
+  }else if(view==="tests"){
+    h=pathHTML(SUBJECTS.find(x=>x.id===arg)||SUBJECTS[0]);
+  }else if(view==="foryou"){
+    h=forYouHTML();
+  }else if(view==="cards"){
+    h=cardsHTML();
+  }else if(view==="leaderboard"){
+    h=leaderboardHTML();
+  }else if(view==="awards"){
+    h=`<div class="card"><h3>Awards</h3>${AWARDS.map(a=>`<div class="award ${a[3](state)?"":"locked"}"><div class="big">${a[0]}</div><div><b>${a[1]}</b><div class="small">${a[2]}</div></div></div>`).join("")}</div>`;
+  }else if(view==="settings"){
+    h=avatarPicker()+pipCard()+`<div class="card"><h3>Account</h3><p>Logged in as <b>${escapeHTML(me().name)}</b></p><button class="btn danger" onclick="logout()">Log out</button></div>`;
+  }
+  c.innerHTML=h;
+  window.scrollTo(0,0);
+  if(view==="quiz")startQT();
+  updatePip();
+}
+
+/* ===== THEME + START ===== */
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+  save("gradeo_theme",document.body.classList.contains("dark")?"dark":"light");
+}
+(function init(){
+  if(store("gradeo_theme","light")==="dark")document.body.classList.add("dark");
+  const key=store("gradeo_session","");
+  if(key&&getUsers()[key])login(key);else showAuth("login");
+})();
+</script>
+</body>
+</html>
